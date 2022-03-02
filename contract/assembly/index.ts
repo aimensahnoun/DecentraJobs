@@ -6,10 +6,10 @@ import { Profile } from "../models/models";
 
 // storing userProfiles
 const userProfiles = new PersistentUnorderedMap<string, Profile>(
-  "userProfiles"
+  "uP"
 );
 
-//returns the profile of the user if existts else returns null
+//returns the profile of the user if exists else returns null
 export function getProfile(accountId: string): Profile | null {
   return userProfiles.get(accountId);
 }
@@ -21,19 +21,18 @@ export function createProfile(
   avatarUrl: string,
   skills: string[],
   accountId: string
-): void {
+): Profile | null {
   userProfiles.set(
     accountId,
     new Profile(fullName, bio, avatarUrl, skills, accountId)
   );
+  
+  
+  return getProfile(accountId);
 }
 
-//Returns static string
-export function helloWorld(): string {
-  return `Hello World`;
-}
-
-//Returns hello with username
-export function helloYou(): string {
-  return `Hello ${Context.sender}`;
+//Delete profile
+export function deleteProfile(accountId: string): boolean {
+  userProfiles.delete(accountId);
+  return true
 }
