@@ -96,6 +96,18 @@ export default function Home() {
               //Saving authentication state to localStorage
               localStorage.setItem("authenticating", true);
               return signIn();
+            } else {
+              viewFunction("getProfile", { accountId: wallet.getAccountId() })
+                .then((result) => {
+                  setUserProfileState(result);
+                })
+                .then(() => {
+                  if (userProfileState) {
+                    router.push("/dashboard");
+                  } else {
+                    router.push("/onboarding");
+                  }
+                });
             }
           }}
         >

@@ -79,11 +79,11 @@ const OnBoarding = () => {
   }, [skillsInput]);
 
   useEffect(() => {
-    // gsap.fromTo(
-    //   "#hero_section",
-    //   { y: 100, opacity: 0 },
-    //   { duration: 1.2, y: 0, opacity: 1 }
-    // );
+    gsap.fromTo(
+      "#hero_section",
+      { y: 100, opacity: 0 },
+      { duration: 1.2, y: 0, opacity: 1 }
+    );
   }, []);
 
   return (
