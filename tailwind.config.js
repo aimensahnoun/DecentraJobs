@@ -9,6 +9,7 @@ module.exports = {
         "decentra-green": "#399E5A",
         "decentra-turquoise": "#63E2C6",
         "decentra-bluegreen": "#5ABCB9",
+        "decentra-gray": "#F6F6F6",
       },
     },
   },
