@@ -52,21 +52,23 @@ const OnBoarding = () => {
     })
       .then((result) => {
         console.log(result);
+        setIsLoading(false);
         alert("Profile created successfully");
       })
       .catch((err) => {
         console.log(err);
+        setIsLoading(false);
         alert("Error creating profile");
       });
-
-    setIsLoading(false);
   };
-
-  console.log(setIsLoading)
 
   watch((value) => setBioLength(value.bio.length));
 
   const skillsInput = watch("skills");
+
+  useEffect(() => {
+    console.log(isLoading);
+  }, [isLoading]);
 
   useEffect(() => {
     if (!skillsInput) return;
@@ -202,8 +204,8 @@ const OnBoarding = () => {
 
           <input
             type="submit"
-            className={`h-[2.5rem] w-fit p-2 bg-decentra-turquoise rounded-lg self-center mt-[2rem] cursor-pointer transition-all duration-300 ${
-              isLoading ? "bg-decentra-gray cursor-not-allowed" : ""
+            className={`h-[2.5rem] w-fit p-2  rounded-lg self-center mt-[2rem] cursor-pointer transition-all duration-300 ${
+              isLoading ? "bg-decentra-gray cursor-not-allowed" : "bg-decentra-turquoise"
             }`}
             value={isLoading ? "Loading..." : "Submit"}
           />
