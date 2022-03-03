@@ -1,12 +1,13 @@
 //Next JS imports
 import Head from "next/head";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 //React import
 import { useEffect } from "react";
 
 //Near imports
-import { signIn, wallet } from "../../near/near-setup";
+import { signIn, wallet, viewFunction, signOut } from "../../near/near-setup";
 
 //Assets import
 import Hero from "../../public/assets/images/hero.svg";
@@ -14,10 +15,43 @@ import Hero from "../../public/assets/images/hero.svg";
 //Gsap import
 import gsap from "gsap";
 
-export default function Home() {
-  useEffect(() => {
-    wallet.getAccountId();
+//Recoil import
+import { useRecoilState } from "recoil";
+import { userProfile } from "../recoil/state";
 
+export default function Home() {
+  //Next JS router
+  const router = useRouter();
+
+  //User profile state
+  const [userProfileState, setUserProfileState] = useRecoilState(userProfile);
+
+  useEffect(() => {
+    const user = wallet.getAccountId();
+    const authenticating = localStorage.getItem("authenticating");
+
+    try {
+      //Checking if user logged in before refresh
+      if (user != "" && authenticating) {
+        viewFunction("getProfile", { accountId: user }).then((result) => {
+          setUserProfileState(result);
+        });
+
+        localStorage.removeItem("authenticating");
+        //If user has profile redirect to dashboard page
+        if (userProfileState) {
+          router.push("/dasboard");
+        }
+        //Else redirect to onboarding page
+        router.push("/onboarding");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, []);
+
+  //Logo and hero section animation
+  useEffect(() => {
     gsap.fromTo(
       "#hero_section",
       { x: -100, opacity: 0 },
@@ -56,7 +90,14 @@ export default function Home() {
 
         <div
           className="p-2 bg-decentra-green text-white rounded-lg cursor-pointer"
-          onClick={signIn}
+          onClick={() => {
+            const user = wallet.getAccountId();
+            if (user == "") {
+              //Saving authentication state to localStorage
+              localStorage.setItem("authenticating", true);
+              return signIn();
+            }
+          }}
         >
           <span>Get Started</span>
         </div>
