@@ -12,9 +12,15 @@ import NavItem from "../components/navItem/navItem";
 import { CgBriefcase } from "react-icons/cg";
 import { FiUsers } from "react-icons/fi";
 
+//Recoil import
+import { useRecoilValue } from "recoil";
+import { userProfile } from "../recoil/state";
+
 const Dashboard = () => {
   const [currentTab, setCurrentTab] = useState(0);
+  const user = useRecoilValue(userProfile);
 
+  console.log(user);
   return (
     <div className="w-screen h-screen flex">
       <Head>
@@ -35,13 +41,13 @@ const Dashboard = () => {
               width="100%"
               height="100%"
               className="object-cover rounded-full"
-              src="https://images.pexels.com/photos/3970387/pexels-photo-3970387.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+              src={user.avatarUrl}
             />
           </div>
 
           <div className="flex flex-col">
             <span className="text-decentra-green font-medium">
-              Aimen Sahnoun
+              {user.fullName}
             </span>
             <span className="text-[.8rem]">aimen.near</span>
           </div>

@@ -92,22 +92,22 @@ export default function Home() {
           className="p-2 bg-decentra-green text-white rounded-lg cursor-pointer"
           onClick={() => {
             const user = wallet.getAccountId();
+            console.log(user);
             if (user == "") {
               //Saving authentication state to localStorage
               localStorage.setItem("authenticating", true);
               return signIn();
             } else {
-              viewFunction("getProfile", { accountId: wallet.getAccountId() })
-                .then((result) => {
+              viewFunction("getProfile", { accountId: user }).then((result) => {
+                console.log(result);
+                if(result){
                   setUserProfileState(result);
-                })
-                .then(() => {
-                  if (userProfileState) {
-                    router.push("/dashboard");
-                  } else {
-                    router.push("/onboarding");
-                  }
-                });
+                  router.push("/dashboard");
+                }else{
+                  router.push("/onboarding");
+                }
+                
+              });
             }
           }}
         >
