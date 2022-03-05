@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "autoprefixer": "^10.4.2",
+    "browser-image-compression": "^1.0.17",
     "gsap": "^3.9.1",
     "near-api-js": "^0.44.2",
     "next": ">=12.0.9",
@@ -23,7 +24,8 @@
     "react-hook-form": "^7.27.1",
     "react-icons": "^4.3.1",
     "react-spinners": "^0.11.0",
-    "recoil": "^0.6.1"
+    "recoil": "^0.6.1",
+    "web3.storage": "^3.5.6"
   },
   "devDependencies": {
     "eslint": "8.7.0",
