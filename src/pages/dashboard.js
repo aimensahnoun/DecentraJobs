@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import DecentraImage from "../components/decentraImage/decentraImage";
 import NavItem from "../components/navItem/navItem";
 import LoadingSpinner from "../components/loadingSpinner/loadingSpinner";
+import ActiveProjectContent from "../components/activeProjectsContent/activeProjectsContent";
 
 //Near import
 import { viewFunction, wallet , signOut } from "../../near/near-setup";
@@ -78,7 +79,7 @@ const Dashboard = () => {
             <span className="text-decentra-green font-medium">
               {user.fullName}
             </span>
-            <span className="text-[.8rem]">aimen.near</span>
+            <span className="text-[.8rem]">{wallet.getAccountId()}</span>
           </div>
         </div>
 
@@ -110,6 +111,11 @@ const Dashboard = () => {
         </div>
 
       </nav>
+
+
+      {/* Content */}
+      <ActiveProjectContent />
+
     </div>
   );
 };
