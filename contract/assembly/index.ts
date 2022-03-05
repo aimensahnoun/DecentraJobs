@@ -1,5 +1,5 @@
 //Near imports
-import { context, Context, PersistentUnorderedMap } from "near-sdk-as";
+import { context, Context, logging, PersistentUnorderedMap } from "near-sdk-as";
 
 //Models import
 import { Profile } from "../models/models";
@@ -20,9 +20,10 @@ export function createProfile(
   skills: string[],
   accountId: string
 ): void {
+  assert(accountId == context.sender, "Only the account owner can create a profile");
   const user = getProfile(accountId);
-
-  assert(user !== null, "User already has a profile");
+  logging.log(user);
+  assert(user == null, "User already has a profile");
 
   userProfiles.set(
     accountId,
@@ -32,7 +33,7 @@ export function createProfile(
 
 //Delete profile
 export function deleteProfile(accountId: string): boolean {
-  assert(accountId === context.sender, "You can only delete your profile");
+  assert(accountId == context.sender, "You can only delete your profile");
 
   userProfiles.delete(accountId);
   return true;
