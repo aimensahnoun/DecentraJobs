@@ -17,7 +17,7 @@ import { viewFunction, wallet , signOut } from "../../near/near-setup";
 //Icons import
 import { CgBriefcase } from "react-icons/cg";
 import { FiUsers } from "react-icons/fi";
-import { BiLogOut } from "react-icons/bi";
+import { BiLogOut , BiChalkboard } from "react-icons/bi";
 import { BsChatFill } from "react-icons/bs";
 
 //Recoil import
@@ -95,16 +95,22 @@ const Dashboard = () => {
           />
 
           <NavItem
-            Icon={FiUsers}
+            Icon={BiChalkboard}
             isActive={currentTab === 1}
             onClick={() => setCurrentTab(1)}
+            title="My Projects"
+          />
+          <NavItem
+            Icon={FiUsers}
+            isActive={currentTab === 2}
+            onClick={() => setCurrentTab(2)}
             title="Client List"
           />
 
           <NavItem
             Icon={BsChatFill}
-            isActive={currentTab === 2}
-            onClick={() => setCurrentTab(2)}
+            isActive={currentTab === 3}
+            onClick={() => setCurrentTab(3)}
             title="Chat"
           />
 

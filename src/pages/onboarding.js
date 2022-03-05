@@ -1,13 +1,21 @@
 //Next import
 import Image from "next/image";
 import Head from "next/head";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 
 //React import
 import { useEffect, useState, useRef } from "react";
 
+//Component import
+import LoadingSpinner from "../components/loadingSpinner/loadingSpinner";
+
 //Near import
-import { callFunction, wallet , signOut} from "../../near/near-setup";
+import {
+  callFunction,
+  wallet,
+  signOut,
+  viewFunction,
+} from "../../near/near-setup";
 
 //Toastify import
 import { toast, ToastContainer } from "react-toastify";
@@ -29,10 +37,11 @@ import gsap from "gsap";
 import { uploadFile } from "../utils/file-upload";
 
 const OnBoarding = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [profileImage, setProfileImage] = useState(null);
   const [bioLength, setBioLength] = useState(0);
   const [skills, setSkills] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const imageRef = useRef(null);
 
@@ -48,7 +57,7 @@ const OnBoarding = () => {
   const onSubmit = async (data) => {
     if (isLoading) return;
 
-    setIsLoading(true);
+    setIsSubmitting(true);
 
     const { fullName, bio } = data;
 
@@ -64,7 +73,7 @@ const OnBoarding = () => {
       accountId: wallet.getAccountId(),
     })
       .then((_result) => {
-        setIsLoading(false);
+        setIsSubmitting(false);
         toast.success("Profile created successfully", {
           position: "top-right",
           autoClose: 5000,
@@ -79,7 +88,7 @@ const OnBoarding = () => {
       })
       .catch((err) => {
         console.log(err);
-        setIsLoading(false);
+        setIsSubmitting(false);
         toast.error("Something went wrong!", {
           position: "top-right",
           autoClose: 5000,
@@ -97,8 +106,19 @@ const OnBoarding = () => {
   const skillsInput = watch("skills");
 
   useEffect(() => {
-    console.log(isLoading);
-  }, [isLoading]);
+    const nearId = wallet.getAccountId();
+    //Checking if user is logged in
+    if (!nearId) return router.replace("/");
+
+    viewFunction("getProfile", { accountId: nearId })
+      .then((result) => {
+        if (result) return router.replace("/dashboard");
+        else setIsLoading(false)
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
 
   useEffect(() => {
     if (!skillsInput) return;
@@ -116,7 +136,9 @@ const OnBoarding = () => {
     );
   }, []);
 
-  return (
+  return isLoading ? (
+    <LoadingSpinner />
+  ) : (
     <div className="w-screen h-screen flex justify-center items-center bg-[#EFF5F5] select-none">
       <ToastContainer />
       <Head>
@@ -236,18 +258,23 @@ const OnBoarding = () => {
           <input
             type="submit"
             className={`h-[2.5rem] w-fit p-2  rounded-lg self-center mt-[2rem] cursor-pointer transition-all duration-300 ${
-              isLoading
+              isSubmitting
                 ? "bg-decentra-gray cursor-not-allowed"
                 : "bg-decentra-turquoise"
             }`}
-            value={isLoading ? "Loading..." : "Submit"}
+            value={isSubmitting ? "Loading..." : "Submit"}
           />
         </form>
 
-        <span className="self-center mt-[1.5rem] cursor-pointer" onClick={() => {
-          signOut()
-          router.replace("/")
-        }}>Use a different account</span>
+        <span
+          className="self-center mt-[1.5rem] cursor-pointer"
+          onClick={() => {
+            signOut();
+            router.replace("/");
+          }}
+        >
+          Use a different account
+        </span>
       </div>
     </div>
   );
