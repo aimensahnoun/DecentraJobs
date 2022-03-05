@@ -1,11 +1,17 @@
+//React import
+import { useState } from "react";
+
 //Icons import
 import { AiOutlineSearch } from "react-icons/ai";
 import { IoMdAdd } from "react-icons/io";
 
 //Component import
 import ProjectComponent from "../projectComponent/projectComponent";
+import Modal from "../modal/modal";
 
 const ActiveProjectContent = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className="w-[calc(100%-20rem)] h-full py-[4rem] px-[2rem]">
       {/* Header */}
@@ -23,16 +29,25 @@ const ActiveProjectContent = () => {
           </div>
         </div>
 
-        <div className="h-[3rem] w-fit p-2 rounded-lg text-black flex gap-x-2 bg-decentra-green items-center cursor-pointer select-none">
+        <div className="h-[3rem] w-fit p-2 rounded-lg text-black flex gap-x-2 bg-decentra-green items-center cursor-pointer select-none" onClick={() => setIsModalOpen(true)}>
           <IoMdAdd className="text-[1.5rem]" />
           <span>Create Project</span>
         </div>
       </div>
 
       {/* Content */}
-      <ProjectComponent projectName="Crypto Landing Page" createdDate="20 Jul, 2020" deadline="19 May, 2021" categories={["Web Dev" , "Crypto"]} />
-     
-    
+      <ProjectComponent
+        projectName="Crypto Landing Page"
+        createdDate="20 Jul, 2020"
+        deadline="19 May, 2021"
+        categories={["Web Dev", "Crypto"]}
+      />
+
+      <Modal
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        title="Create Project"
+      />
     </div>
   );
 };
