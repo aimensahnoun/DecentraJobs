@@ -1,27 +1,55 @@
 //Next import
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 //React import
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 //Components import
 import DecentraImage from "../components/decentraImage/decentraImage";
 import NavItem from "../components/navItem/navItem";
+import LoadingSpinner from "../components/loadingSpinner/loadingSpinner";
+
+//Near import
+import { viewFunction, wallet } from "../../near/near-setup";
 
 //Icons import
 import { CgBriefcase } from "react-icons/cg";
 import { FiUsers } from "react-icons/fi";
 
 //Recoil import
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { userProfile } from "../recoil/state";
 
 const Dashboard = () => {
   const [currentTab, setCurrentTab] = useState(0);
-  const user = useRecoilValue(userProfile);
+  const [isLoading, setIsLoading] = useState(true);
 
-  console.log(user);
-  return (
+  const [user, setUser] = useRecoilState(userProfile);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      return setIsLoading(false);
+    }
+
+    const nearId = wallet.getAccountId();
+
+    if (!nearId) return router.replace("/");
+
+    viewFunction("getProfile", { accountId: nearId }).then((result) => {
+      if (!result) return router.replace("/onboarding");
+
+      console.log(result);
+      setUser(result);
+      setIsLoading(false);
+    });
+  }, []);
+
+  return isLoading ? (
+    <LoadingSpinner />
+  ) : (
     <div className="w-screen h-screen flex">
       <Head>
         <title>DecentraJobs | Dashboard</title>
