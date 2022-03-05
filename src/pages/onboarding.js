@@ -1,12 +1,16 @@
 //Next import
 import Image from "next/image";
 import Head from "next/head";
+import {useRouter} from "next/router";
 
 //React import
 import { useEffect, useState, useRef } from "react";
 
 //Near import
 import { callFunction, wallet } from "../../near/near-setup";
+
+//Toastify import
+import { toast, ToastContainer } from "react-toastify";
 
 //Icons import
 import { HiUpload } from "react-icons/hi";
@@ -26,10 +30,13 @@ import { uploadFile } from "../utils/file-upload";
 
 const OnBoarding = () => {
   const [profileImage, setProfileImage] = useState(null);
-  const imageRef = useRef(null);
   const [bioLength, setBioLength] = useState(0);
   const [skills, setSkills] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const imageRef = useRef(null);
+
+  const router = useRouter();
 
   //Form state
   const {
@@ -56,15 +63,32 @@ const OnBoarding = () => {
       avatarUrl: avatarUrl,
       accountId: wallet.getAccountId(),
     })
-      .then((result) => {
-        console.log(result);
+      .then((_result) => {
         setIsLoading(false);
-        alert("Profile created successfully");
+        toast.success("Profile created successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+        router.replace("/dashboard");
       })
       .catch((err) => {
         console.log(err);
         setIsLoading(false);
-        alert("Error creating profile");
+        toast.error("Something went wrong!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       });
   };
 
@@ -94,6 +118,7 @@ const OnBoarding = () => {
 
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-[#EFF5F5] select-none">
+      <ToastContainer />
       <Head>
         <title>DecentraJobs | OnBoarding</title>
       </Head>
