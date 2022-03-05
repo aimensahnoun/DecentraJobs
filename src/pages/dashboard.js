@@ -18,6 +18,7 @@ import { viewFunction, wallet , signOut } from "../../near/near-setup";
 import { CgBriefcase } from "react-icons/cg";
 import { FiUsers } from "react-icons/fi";
 import { BiLogOut } from "react-icons/bi";
+import { BsChatFill } from "react-icons/bs";
 
 //Recoil import
 import { useRecoilState } from "recoil";
@@ -99,6 +100,15 @@ const Dashboard = () => {
             onClick={() => setCurrentTab(1)}
             title="Client List"
           />
+
+          <NavItem
+            Icon={BsChatFill}
+            isActive={currentTab === 2}
+            onClick={() => setCurrentTab(2)}
+            title="Chat"
+          />
+
+
         </div>
 
         {/* Logout section */}

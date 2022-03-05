@@ -1,24 +1,11 @@
-//React import
-import { useState, useLayoutEffect } from "react";
-
 //Icons import
 import { AiOutlineSearch } from "react-icons/ai";
 import { IoMdAdd } from "react-icons/io";
-import { HiDocumentText } from "react-icons/hi";
 
-import TailwindColor from "@videsk/tailwind-random-color";
+//Component import
+import ProjectComponent from "../projectComponent/projectComponent";
 
 const ActiveProjectContent = () => {
-  const [colors, setColors] = useState([]);
-
-  useLayoutEffect(() => {
-    const colorsList = [];
-    for (let i = 0; i < 10; i++) {
-      colorsList.push(new TailwindColor().pick());
-    }
-    setColors(colorsList);
-  }, []);
-
   return (
     <div className="w-[calc(100%-20rem)] h-full py-[4rem] px-[2rem]">
       {/* Header */}
@@ -43,40 +30,9 @@ const ActiveProjectContent = () => {
       </div>
 
       {/* Content */}
-
-      <div className="w-full h-[6rem] shadow-decentra rounded-lg p-4 flex flex-col justify-between">
-        {/* Titles */}
-        <div className="w-full flex items-center">
-          <span className="w-[20%]">Project Name</span>
-          <span className="w-[20%]">Date Created</span>
-          <span className="w-[20%]">Deadline</span>
-          <span className="w-[10%]">Project Brief</span>
-          <span className="w-[30%]">Category</span>
-        </div>
-        {/* Data */}
-        <div className="w-full flex items-center">
-          <span className="w-[20%] text-decentra-green font-medium">
-            Crypto Landing Page
-          </span>
-          <span className="w-[20%] text-decentra-green font-medium">
-            3 Jul, 2020
-          </span>
-          <span className="w-[20%] text-decentra-green font-medium">
-            14 May, 2021
-          </span>
-          <div className="w-[10%] text-decentra-green font-medium flex items-center gap-x-2 cursor-pointer">
-            <HiDocumentText className="text-[1.5rem]" />
-            <span>Download</span>
-          </div>
-          <div className="w-[30%] flex items-center gap-x-2 font-medium overflow-hidden">
-            <div
-              className={`w-[fit] h-[2rem] flex justify-center items-center rounded-xl p-2 bg-decentra-green text-white`}
-            >
-              <span>Web Dev</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ProjectComponent projectName="Crypto Landing Page" createdDate="20 Jul, 2020" deadline="19 May, 2021" categories={["Web Dev" , "Crypto"]} />
+     
+    
     </div>
   );
 };
