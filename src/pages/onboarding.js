@@ -7,7 +7,7 @@ import {useRouter} from "next/router";
 import { useEffect, useState, useRef } from "react";
 
 //Near import
-import { callFunction, wallet } from "../../near/near-setup";
+import { callFunction, wallet , signOut} from "../../near/near-setup";
 
 //Toastify import
 import { toast, ToastContainer } from "react-toastify";
@@ -243,6 +243,11 @@ const OnBoarding = () => {
             value={isLoading ? "Loading..." : "Submit"}
           />
         </form>
+
+        <span className="self-center mt-[1.5rem] cursor-pointer" onClick={() => {
+          signOut()
+          router.replace("/")
+        }}>Use a different account</span>
       </div>
     </div>
   );
