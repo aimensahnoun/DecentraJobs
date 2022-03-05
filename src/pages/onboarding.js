@@ -20,7 +20,9 @@ import { useForm } from "react-hook-form";
 
 //GSAP import
 import gsap from "gsap";
-import { errorSelector } from "recoil";
+
+//utils import
+import { uploadFile } from "../utils/file-upload";
 
 const OnBoarding = () => {
   const [profileImage, setProfileImage] = useState(null);
@@ -36,18 +38,22 @@ const OnBoarding = () => {
     watch,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (isLoading) return;
 
     setIsLoading(true);
 
     const { fullName, bio } = data;
 
+    const avatarUrl = profileImage
+      ? await uploadFile(profileImage, "image")
+      : avatarImage;
+
     callFunction("createProfile", {
       fullName,
       bio,
       skills,
-      avatarUrl: avatarImage,
+      avatarUrl: avatarUrl,
       accountId: wallet.getAccountId(),
     })
       .then((result) => {
@@ -205,7 +211,9 @@ const OnBoarding = () => {
           <input
             type="submit"
             className={`h-[2.5rem] w-fit p-2  rounded-lg self-center mt-[2rem] cursor-pointer transition-all duration-300 ${
-              isLoading ? "bg-decentra-gray cursor-not-allowed" : "bg-decentra-turquoise"
+              isLoading
+                ? "bg-decentra-gray cursor-not-allowed"
+                : "bg-decentra-turquoise"
             }`}
             value={isLoading ? "Loading..." : "Submit"}
           />

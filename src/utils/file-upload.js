@@ -26,7 +26,7 @@ export const uploadFile = async (file, type) => {
 
     const cid = await client.put([finalFile]);
 
-    return `${cid}.ipfs.dweb.link/${fileName}`;
+    return `https://${cid}.ipfs.dweb.link/${fileName}`;
   } catch (e) {
     console.log(e);
   }
