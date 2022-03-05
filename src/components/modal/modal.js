@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 //Icon import
 import { MdClose } from "react-icons/md/";
 
-const Modal = ({ isOpen, setIsOpen, title }) => {
+const Modal = ({ isOpen, setIsOpen, title, children }) => {
   //Backdrop animation
   const backdropVariants = {
     hidden: { opacity: 0 },
@@ -32,11 +32,11 @@ const Modal = ({ isOpen, setIsOpen, title }) => {
             initial="hidden"
             animate="enter"
             exit="hidden"
-            className="w-[70%] h-[70%] rounded-lg bg-white p-6"
+            className="w-[50%] h-[70%] rounded-lg bg-white p-6"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-[1rem]">
               <span className="text-[1.5rem] text-decentra-green">{title}</span>
               <div
                 className=" w-[2rem] h-[2rem] rounded-full flex justify-center items-center cursor-pointer"
@@ -44,6 +44,11 @@ const Modal = ({ isOpen, setIsOpen, title }) => {
               >
                 <MdClose className="text-black text-[1.5rem]" />
               </div>
+            </div>
+
+            {/* Content */}
+            <div className="h-[*] max-h-fit flex flex-col text-black">
+              {children}
             </div>
           </motion.div>
         </motion.div>

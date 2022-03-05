@@ -7,10 +7,11 @@ import { IoMdAdd } from "react-icons/io";
 
 //Component import
 import ProjectComponent from "../projectComponent/projectComponent";
-import Modal from "../modal/modal";
+import CreateProjectModal from "../createProjectModal/createProjectModal";
 
 const ActiveProjectContent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   return (
     <div className="w-[calc(100%-20rem)] h-full py-[4rem] px-[2rem]">
@@ -29,7 +30,12 @@ const ActiveProjectContent = () => {
           </div>
         </div>
 
-        <div className="h-[3rem] w-fit p-2 rounded-lg text-black flex gap-x-2 bg-decentra-green items-center cursor-pointer select-none" onClick={() => setIsModalOpen(true)}>
+        <div
+          className="h-[3rem] w-fit p-2 rounded-lg text-black flex gap-x-2 bg-decentra-green items-center cursor-pointer select-none"
+          onClick={() => {
+            setIsModalOpen(true);
+          }}
+        >
           <IoMdAdd className="text-[1.5rem]" />
           <span>Create Project</span>
         </div>
@@ -43,11 +49,7 @@ const ActiveProjectContent = () => {
         categories={["Web Dev", "Crypto"]}
       />
 
-      <Modal
-        isOpen={isModalOpen}
-        setIsOpen={setIsModalOpen}
-        title="Create Project"
-      />
+      <CreateProjectModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
     </div>
   );
 };
