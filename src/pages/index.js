@@ -34,16 +34,18 @@ export default function Home() {
       //Checking if user logged in before refresh
       if (user != "" && authenticating) {
         viewFunction("getProfile", { accountId: user }).then((result) => {
+
           setUserProfileState(result);
+          localStorage.removeItem("authenticating");
+          //If user has profile redirect to dashboard page
+          if (result) {
+            router.push("/dashboard");
+          }else{
+          //Else redirect to onboarding page
+          router.push("/onboarding");
+          }
         });
 
-        localStorage.removeItem("authenticating");
-        //If user has profile redirect to dashboard page
-        if (userProfileState) {
-          router.push("/dasboard");
-        }
-        //Else redirect to onboarding page
-        router.push("/onboarding");
       }
     } catch (e) {
       console.log(e);
