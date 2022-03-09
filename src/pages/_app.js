@@ -1,7 +1,10 @@
 import "../styles/globals.css";
 
 //React imports
-import { useLayoutEffect } from "react";
+import { useEffect, useState } from "react";
+
+//Component import
+import LoadingSpinner from "../components/loadingSpinner/loadingSpinner";
 
 //Near imports
 import { initNear } from "../../near/near-setup";
@@ -10,15 +13,20 @@ import { initNear } from "../../near/near-setup";
 import { RecoilRoot } from "recoil";
 
 //Toastify css import
-import 'react-toastify/dist/ReactToastify.css'
+import "react-toastify/dist/ReactToastify.css";
 
 function MyApp({ Component, pageProps }) {
+  const [isLoading, setIsLoading] = useState(true);
+
   //Initialize Near when the app starts
-  useLayoutEffect(() => {
+  useEffect(() => {
     initNear();
+    setIsLoading(false)
   }, []);
 
-  return (
+  return isLoading ? (
+    <LoadingSpinner />
+  ) : (
     <RecoilRoot>
       <Component {...pageProps} />
     </RecoilRoot>

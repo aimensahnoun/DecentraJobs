@@ -109,7 +109,7 @@ const OnBoarding = () => {
     const nearId = wallet.getAccountId();
     //Checking if user is logged in
     if (!nearId) return router.replace("/");
-
+               
     viewFunction("getProfile", { accountId: nearId })
       .then((result) => {
         if (result) return router.replace("/dashboard");

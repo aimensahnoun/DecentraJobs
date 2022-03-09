@@ -47,7 +47,7 @@ const Modal = ({ isOpen, setIsOpen, title, children }) => {
             </div>
 
             {/* Content */}
-            <div className="h-[*] max-h-fit flex flex-col text-black">
+            <div className="max-h-fit flex flex-col text-black">
               {children}
             </div>
           </motion.div>
