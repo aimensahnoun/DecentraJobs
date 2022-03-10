@@ -1,6 +1,9 @@
 //React import
 import { useLayoutEffect, useState } from "react";
 
+//Component import
+import ProjectDetails from "../projectDetails/projectDetails";
+
 //Icon import
 import { HiDocumentText } from "react-icons/hi";
 
@@ -8,6 +11,7 @@ const ProjectComponent = ({ projectName, brief, categories, project }) => {
   //UseStates
   const [createdDate, setDate] = useState(null);
   const [deadline, setDeadline] = useState(null);
+  const [isModalOpen, setModalOpen] = useState(null);
 
   useLayoutEffect(() => {
     var date = new Date(parseInt(project.createdOn));
@@ -22,7 +26,10 @@ const ProjectComponent = ({ projectName, brief, categories, project }) => {
   }, []);
 
   return (
-    <div className="w-full h-[6rem] shadow-decentra rounded-lg p-4 flex flex-col justify-between">
+    <div
+      className="w-full h-[6rem] shadow-decentra rounded-lg p-4 flex flex-col justify-between cursor-pointer"
+      onClick={() => setModalOpen(true)}
+    >
       {/* Titles */}
       <div className="w-full flex items-center">
         <span className="w-[20%]">Project Name</span>
@@ -73,6 +80,12 @@ const ProjectComponent = ({ projectName, brief, categories, project }) => {
           })}
         </div>
       </div>
+
+      <ProjectDetails
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setModalOpen}
+        projectId={project?.projectId}
+      />
     </div>
   );
 };
