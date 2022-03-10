@@ -7,6 +7,9 @@ import ProjectDetails from "../projectDetails/projectDetails";
 //Icon import
 import { HiDocumentText } from "react-icons/hi";
 
+//Utils import
+import {parseDate} from "../../utils/parse-date"
+
 const ProjectComponent = ({ projectName, brief, categories, project }) => {
   //UseStates
   const [createdDate, setDate] = useState(null);
@@ -14,15 +17,10 @@ const ProjectComponent = ({ projectName, brief, categories, project }) => {
   const [isModalOpen, setModalOpen] = useState(null);
 
   useLayoutEffect(() => {
-    var date = new Date(parseInt(project.createdOn));
-    const splitDate = date.toString().split(" ");
-    date = `${splitDate[2]} ${splitDate[1]}, ${splitDate[3]}`;
-    setDate(date);
+   
+    setDate(parseDate(project.createdOn));
 
-    var deadLineDate = new Date(project.deadline);
-    const splitDeadline = deadLineDate.toString().split(" ");
-    deadLineDate = `${splitDeadline[2]} ${splitDeadline[1]}, ${splitDeadline[3]}`;
-    setDeadline(deadLineDate);
+    setDeadline(parseDate(project.deadline));
   }, []);
 
   return (

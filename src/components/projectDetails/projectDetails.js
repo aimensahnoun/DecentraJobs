@@ -16,6 +16,9 @@ import Near from "../../../public/assets/images/near.svg";
 //Icon import
 import { HiDocumentText } from "react-icons/hi";
 
+//Utils import
+import { parseDate } from "../../utils/parse-date";
+
 const ProjectDetails = ({ isModalOpen, setIsModalOpen, projectId }) => {
   const [project, setProject] = useState(null);
 
@@ -78,10 +81,21 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, projectId }) => {
           </div>
         </div>
 
-        <span className="font-medium">Project Payment:</span>
-        <div className="flex gap-x-1 items-center">
-          <span>{utils.format.formatNearAmount(project?.cost)}</span>
-          <Image src={Near} alt="Near Logo" width={15} height={15} />
+        <div className="flex gap-x-[4rem] mb-4">
+          <div className="flex flex-col">
+            <span className="font-medium">Project Payment:</span>
+            <div className="flex gap-x-1 items-center">
+              <span>{utils.format.formatNearAmount(project?.cost)}</span>
+              <Image src={Near} alt="Near Logo" width={15} height={15} />
+            </div>
+          </div>
+
+          <div className="flex flex-col">
+            <span className="font-medium">Project Deadline:</span>
+            <div className="flex gap-x-1 items-center">
+              <span>{parseDate(project?.deadline)}</span>
+            </div>
+          </div>
         </div>
 
         <span className="font-medium">Project Description:</span>
@@ -91,7 +105,7 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, projectId }) => {
           <>
             <span className="font-medium">Project Brief:</span>
             <div
-              className="flex items-center gap-x-2 text-decentra-green cursor-pointer"
+              className="flex items-center gap-x-2 text-decentra-green cursor-pointer w-fit"
               onClick={() => window.open(project.projectBrief, "_blank")}
             >
               <HiDocumentText className="text-[1.5rem]" />
