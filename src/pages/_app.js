@@ -15,6 +15,8 @@ import { RecoilRoot } from "recoil";
 //Toastify css import
 import "react-toastify/dist/ReactToastify.css";
 
+//Toastify import
+import { ToastContainer } from "react-toastify";
 function MyApp({ Component, pageProps }) {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -29,6 +31,7 @@ function MyApp({ Component, pageProps }) {
   ) : (
     <RecoilRoot>
       <Component {...pageProps} />
+      <ToastContainer />
     </RecoilRoot>
   );
 }

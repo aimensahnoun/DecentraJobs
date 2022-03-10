@@ -32,7 +32,7 @@ const Modal = ({ isOpen, setIsOpen, title, children }) => {
             initial="hidden"
             animate="enter"
             exit="hidden"
-            className="w-[50%] h-[70%] rounded-lg bg-white p-6"
+            className="w-fit h-[70%] rounded-xl bg-white p-6 overflow-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}

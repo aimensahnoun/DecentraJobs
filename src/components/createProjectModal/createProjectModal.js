@@ -1,5 +1,8 @@
+//NextJS import
+import Image from "next/image";
+
 //React import
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState, useRef } from "react";
 
 //Form input
 import { useForm } from "react-hook-form";
@@ -7,10 +10,82 @@ import { useForm } from "react-hook-form";
 //Component import
 import Modal from "../modal/modal";
 
-const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
-  const [minDate, setMinDate] = useState(new Date());
+//Assets import
+import Near from "../../../public/assets/images/near.svg";
 
-  const [isSubmitting , setIsSubmitting] = useState(false)
+//Icons import
+import { HiDocumentText } from "react-icons/hi";
+import { AiOutlineDelete } from "react-icons/ai";
+
+//utils import
+import { uploadFile } from "../../utils/file-upload";
+
+//Toastify import
+import { toast } from "react-toastify";
+
+const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
+  //UseStates
+  const [minDate, setMinDate] = useState(new Date());
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [brief, setBrief] = useState(null);
+  const [isDraggedEnter, setIsDraggedEnter] = useState(false);
+
+  //Form hook
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = async (data) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    const { title, deadline, cost, description } = data;
+
+    const url = brief ? await uploadFile(brief, "pdf") : "null";
+
+    const project = {
+      title,
+      deadline,
+      cost,
+      description,
+      url,
+    };
+
+    toast.success("Project Created Successfully", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
+    console.log(project);
+
+    setIsSubmitting(false);
+  };
+
+  //Refs
+  const briefRef = useRef(null);
+
+  const onDragEnter = (e) => {
+    e.preventDefault();
+    setIsDraggedEnter(true);
+  };
+  const onDragOver = (e) => {
+    e.preventDefault();
+  };
+  const onDrop = (e) => {
+    e.preventDefault();
+    setBrief(e.dataTransfer.files[0]);
+  };
+  const onDragLeave = (e) => {
+    e.preventDefault();
+    setIsDraggedEnter(false);
+  };
 
   //Setting min deadline date to be the next day
   useLayoutEffect(() => {
@@ -29,54 +104,128 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
     setMinDate(tomorrow);
   }, []);
 
+  //Project brief section methods
+
   return (
     <Modal
       isOpen={isModalOpen}
       setIsOpen={setIsModalOpen}
       title="Create Project"
     >
-      <form className="flex flex-col gap-y-4">
-        {/* Title */}
-        <div className="flex flex-col">
-          <span>Project Title : </span>
-          <input
-            className="w-[20rem] h-[3rem] outline-none bg-decentra-lightblue rounded-lg p-2"
-            placeholder="Important Project"
-          />
-        </div>
+      <input
+        id="brief"
+        type="file"
+        ref={briefRef}
+        className="hidden"
+        accept="application/pdf"
+        onChange={(e) => {
+          setBrief(e.target.files[0]);
+        }}
+      />
+      <form
+        className="flex flex-col gap-y-4 h-full"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div className="flex gap-x-6">
+          {/* Title */}
+          <div className="flex flex-col">
+            <span>Project Title : </span>
+            <input
+              {...register("title", { required: true })}
+              className="w-[20rem] h-[3rem] outline-none bg-decentra-lightblue rounded-lg p-2"
+              placeholder="Important Project"
+            />
+            {errors.title && (
+              <span className="text-red-600">This field is required</span>
+            )}
+          </div>
 
-        {/* Dates  */}
-        <div className="flex flex-col">
-          <span>Deadline : </span>
-          <input
-            type="date"
-            min={minDate}
-            className="w-[20rem] h-[3rem] bg-decentra-lightblue rounded-lg p-2"
-          />
+          {/* Dates  */}
+          <div className="flex flex-col">
+            <span>Project Deadline : </span>
+            <input
+              {...register("deadline", { required: true, valueAsDate: true })}
+              type="date"
+              min={minDate}
+              className="w-[20rem] h-[3rem] bg-decentra-lightblue rounded-lg p-2"
+            />
+            {errors.deadline && (
+              <span className="text-red-600">This field is required</span>
+            )}
+          </div>
         </div>
-
         {/* Description */}
         <div className="flex flex-col">
           <span>Project Description: </span>
           <textarea
+            {...register("description", { required: true })}
             placeholder="Tell us about the project"
-            className="outline-none w-[25rem] h-[6rem] p-2 bg-[#E2EDEE] rounded-lg border-[2px] border-transparent focus:border-[#297979] resize-none"
+            className="outline-none w-[41.5rem] h-[7rem] p-2 bg-[#E2EDEE] rounded-lg border-[2px] border-transparent focus:border-[#297979] resize-none"
           />
+          {errors.description && (
+            <span className="text-red-600">This field is required</span>
+          )}
         </div>
+
+        {/* Project Cost */}
+        <div className="flex flex-col">
+          <span>Project Cost : </span>
+          <div className="flex w-[41.5rem] h-[3rem] outline-none bg-decentra-lightblue rounded-lg items-center">
+            <input
+              className="bg-transparent w-[95%] outline-none p-2"
+              step="0.1"
+              type="number"
+              placeholder="5 Near"
+              {...register("cost", {
+                required: { value: true, message: "This field is required" },
+                valueAsNumber: true,
+                min: { value: 0.1, message: "Minimum value is 0.1 Near" },
+              })}
+            />
+            <Image src={Near} alt="Near logo" width={20} height={20} />
+          </div>
+          {errors.cost && (
+            <span className="text-red-600">{errors.cost.message}</span>
+          )}
+        </div>
+
         {/* Project Brief */}
         <div>
           <span>Project Brief:</span>
-          <div className="flex flex-col w-[25rem] h-[6rem] bg-decentra-lightblue border-dashed border-[1px] border-decentra-green rounded-lg items-center justify-center">
-            <span>Drag & Drop</span>
-            <span>Or</span>
-            <span>Click here</span>
-          </div>
+          {!brief ? (
+            <div
+              onDragEnter={onDragEnter}
+              onDragLeave={onDragLeave}
+              onDrop={onDrop}
+              onDragOver={onDragOver}
+              className={`flex flex-col w-[41.5rem] h-[7rem] bg-decentra-lightblue border-[1px] border-decentra-green rounded-lg items-center justify-center cursor-pointer ${
+                isDraggedEnter ? "border-solid" : "border-dashed"
+              } `}
+              onClick={() => briefRef.current.click()}
+            >
+              <span>Drag & Drop</span>
+              <span>Or</span>
+              <span>Click here</span>
+            </div>
+          ) : (
+            <div className="flex items-center mt-4 gap-x-2">
+              <HiDocumentText className="text-[1.5rem] text-decentra-green" />
+              <span>{brief.name}</span>
+              <AiOutlineDelete
+                className="text-[1.5rem] cursor-pointer ml-auto"
+                onClick={() => {
+                  setIsDraggedEnter(false);
+                  setBrief(null);
+                }}
+              />
+            </div>
+          )}
         </div>
 
         {/* Submit */}
         <input
           type="submit"
-          className={`h-[2.5rem] w-fit p-2  rounded-lg self-center mt-[2rem] cursor-pointer transition-all duration-300 ${
+          className={`h-[2.5rem] w-fit p-2 rounded-lg self-center mt-auto cursor-pointer transition-all duration-300 ${
             isSubmitting
               ? "bg-decentra-gray cursor-not-allowed"
               : "bg-decentra-turquoise"

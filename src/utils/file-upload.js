@@ -19,7 +19,7 @@ export const uploadFile = async (file, type) => {
   var blob = file.slice(0, file.size, file.type);
   const newFile = new File([blob], fileName, {type: file.type});
 
-  let finalFile = file;
+  let finalFile = newFile;
 
   try {
     if (type === "image") finalFile = await imageCompression(newFile, options);
