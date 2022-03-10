@@ -1,5 +1,8 @@
 //React import
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+//Near import
+import { viewFunction } from "../../../near/near-setup";
 
 //Icons import
 import { AiOutlineSearch } from "react-icons/ai";
@@ -11,7 +14,17 @@ import CreateProjectModal from "../createProjectModal/createProjectModal";
 
 const ActiveProjectContent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [projects, setProjects] = useState(null);
 
+  useEffect(() => {
+    viewFunction("getAllProject")
+      .then((res) => {
+        setProjects(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 
   return (
     <div className="w-[calc(100%-20rem)] h-full py-[4rem] px-[2rem]">
@@ -42,14 +55,27 @@ const ActiveProjectContent = () => {
       </div>
 
       {/* Content */}
-      <ProjectComponent
-        projectName="Crypto Landing Page"
-        createdDate="20 Jul, 2020"
-        deadline="19 May, 2021"
-        categories={["Web Dev", "Crypto"]}
-      />
+      <div className="flex flex-col gap-y-4">
+        {projects !== null
+          ? projects.map((project) => {
+              return (
+                <ProjectComponent
+                  key={project.projectId}
+                  project={project}
+                  projectName="Crypto Landing Page"
+                  createdDate="20 Jul, 2020"
+                  deadline="19 May, 2021"
+                  categories={["Web Dev", "Crypto"]}
+                />
+              );
+            })
+          : null}
+      </div>
 
-      <CreateProjectModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+      <CreateProjectModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      />
     </div>
   );
 };
