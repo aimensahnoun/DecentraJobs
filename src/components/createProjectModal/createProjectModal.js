@@ -4,6 +4,9 @@ import Image from "next/image";
 //React import
 import { useLayoutEffect, useState, useRef } from "react";
 
+//Near import
+import { wallet, callFunction } from "../../../near/near-setup.js";
+
 //Form input
 import { useForm } from "react-hook-form";
 
@@ -45,27 +48,52 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
 
     const url = brief ? await uploadFile(brief, "pdf") : "null";
 
-    const project = {
+    console.log({
       title,
-      deadline,
-      cost,
       description,
-      url,
-    };
-
-    toast.success("Project Created Successfully", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
+      deadline,
+      ownerId: wallet.getAccountId(),
+      projectBrief: url,
+      timestamp: new Date().getTime().toString(),
     });
 
-    console.log(project);
-
-    setIsSubmitting(false);
+    callFunction(
+      "createProject",
+      {
+        title,
+        description,
+        deadline,
+        ownerId: wallet.getAccountId(),
+        projectBrief: url,
+        timestamp: new Date().getTime().toString(),
+      },
+      cost
+    )
+      .then((data) => {
+        toast.success("Project Created Successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setIsSubmitting(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsSubmitting(false);
+        toast.error("Something went wrong!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
   };
 
   //Refs
@@ -144,7 +172,7 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
           <div className="flex flex-col">
             <span>Project Deadline : </span>
             <input
-              {...register("deadline", { required: true, valueAsDate: true })}
+              {...register("deadline", { required: true})}
               type="date"
               min={minDate}
               className="w-[20rem] h-[3rem] bg-decentra-lightblue rounded-lg p-2"
@@ -178,7 +206,6 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
               placeholder="5 Near"
               {...register("cost", {
                 required: { value: true, message: "This field is required" },
-                valueAsNumber: true,
                 min: { value: 0.1, message: "Minimum value is 0.1 Near" },
               })}
             />
