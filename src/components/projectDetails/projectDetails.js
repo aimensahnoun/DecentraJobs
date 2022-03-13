@@ -19,9 +19,6 @@ import { HiDocumentText } from "react-icons/hi";
 //Utils import
 import { parseDate } from "../../utils/parse-date";
 
-//Dependency import
-import cryptoPrice from "crypto-price";
-
 const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
   //UseStates
   const [nearPrice, setNearPrice] = useState(null);

@@ -15,16 +15,39 @@ import CreateProjectModal from "../createProjectModal/createProjectModal";
 const ActiveProjectContent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projects, setProjects] = useState(null);
+  const [search, setSearch] = useState("");
+  const [filteredProjects, setFilteredProjects] = useState(projects);
 
   useEffect(() => {
     viewFunction("getAllProject")
       .then((res) => {
         setProjects(res);
+        setFilteredProjects(res);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
+  useEffect(() => {
+    if (search === "") return setFilteredProjects(projects);
+    if (projects) {
+      setFilteredProjects(
+        projects.filter((project) => {
+          return (
+            project.title.toLowerCase().includes(search.toLowerCase()) ||
+            project.description.toLowerCase().includes(search.toLowerCase()) ||
+            project.tags
+              ?.map((tag) => tag.toLowerCase())
+              .includes(search.toLowerCase())
+              || project.ownerId.toLowerCase().includes(search.toLowerCase())
+          );
+        })
+      );
+    }
+  }, [search]);
+
+  console.log(filteredProjects);
 
   return (
     <div className="w-[calc(100%-20rem)] h-full py-[4rem] px-[2rem]">
@@ -38,6 +61,16 @@ const ActiveProjectContent = () => {
             <AiOutlineSearch className="text-[1.5rem] text-decentra-green mr-2" />
             <input
               className="outline-none w-full"
+              onFocus={() => {
+                viewFunction("getAllProject")
+                  .then((res) => {
+                    setProjects(res);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              }}
+              onChange={(e) => setSearch(e.target.value)}
               placeholder="Tap to search for project"
             />
           </div>
@@ -57,7 +90,7 @@ const ActiveProjectContent = () => {
       {/* Content */}
       <div className="flex flex-col gap-y-4">
         {projects !== null
-          ? projects.map((project) => {
+          ? filteredProjects?.map((project) => {
               return (
                 <ProjectComponent
                   key={project.projectId}
