@@ -24,7 +24,7 @@ const ActiveProjectContent = () => {
       .catch((err) => {
         console.log(err);
       });
-  });
+  }, []);
 
   return (
     <div className="w-[calc(100%-20rem)] h-full py-[4rem] px-[2rem]">

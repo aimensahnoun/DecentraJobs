@@ -5,6 +5,9 @@ import {
   logging,
   PersistentUnorderedMap,
   u128,
+  ContractPromiseBatch,
+  base58,
+  env
 } from "near-sdk-as";
 
 //Models import
@@ -108,3 +111,4 @@ export function deleteProject(projectId: u32): boolean {
   }
   return false;
 }
+

@@ -11,7 +11,6 @@ import NavItem from "../components/navItem/navItem";
 import LoadingSpinner from "../components/loadingSpinner/loadingSpinner";
 import ActiveProjectContent from "../components/activeProjectsContent/activeProjectsContent";
 
-
 //Near import
 import { viewFunction, wallet, signOut } from "../../near/near-setup";
 
@@ -24,11 +23,11 @@ import { BsChatFill } from "react-icons/bs";
 //Recoil import
 import { useRecoilState } from "recoil";
 import { userProfile } from "../recoil/state";
+import ProfilePage from "../components/profilePage/profilePage";
 
 const Dashboard = () => {
   const [currentTab, setCurrentTab] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  
 
   const [user, setUser] = useRecoilState(userProfile);
 
@@ -52,6 +51,17 @@ const Dashboard = () => {
     });
   }, []);
 
+  const renderContent = () => {
+    switch (currentTab) {
+      case -1:
+        return <ProfilePage />;
+      case 0:
+        return <ActiveProjectContent />;
+      default:
+        return <ActiveProjectContent />;
+    }
+  };
+
   return isLoading ? (
     <LoadingSpinner />
   ) : (
@@ -67,7 +77,10 @@ const Dashboard = () => {
         </span>
 
         {/* Profile tab section */}
-        <div className="w-[65%] bg-white rounded-lg h-[4rem] shadow-md flex gap-x-2 items-center justify-center cursor-pointer">
+        <div
+          className="w-[65%] bg-white rounded-lg h-[4rem] shadow-md flex gap-x-2 items-center justify-center cursor-pointer"
+          onClick={() => setCurrentTab(-1)}
+        >
           <div className="w-[2.5rem] h-[2.5rem] rounded-full bg-decentra-gray">
             <DecentraImage
               alt="Profile Image"
@@ -77,7 +90,6 @@ const Dashboard = () => {
               src={user.avatarUrl}
             />
           </div>
-
           <div className="flex flex-col">
             <span className="text-decentra-green font-medium">
               {user.fullName}
@@ -131,7 +143,7 @@ const Dashboard = () => {
       </nav>
 
       {/* Content */}
-      <ActiveProjectContent />
+      {renderContent()}
     </div>
   );
 };

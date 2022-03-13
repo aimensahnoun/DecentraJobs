@@ -1,7 +1,7 @@
 //NextJs import
 import Image from "next/image";
 
-const DecentraImage = ({ src, className, width, height, alt }) => {
+const DecentraImage = ({ src, className, width, height, alt , layout }) => {
   return (
     <Image
       src={`/api/imageproxy?url=${src}`}
@@ -10,6 +10,7 @@ const DecentraImage = ({ src, className, width, height, alt }) => {
       height={height}
       unoptimized
       alt={alt}
+      layout={layout}
     />
   );
 };

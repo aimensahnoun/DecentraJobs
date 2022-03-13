@@ -5,10 +5,10 @@ import Image from "next/image";
 import Modal from "../modal/modal";
 
 //Near import
-import { viewFunction, utils } from "../../../near/near-setup";
+import { wallet, utils } from "../../../near/near-setup";
 
 //React import
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 //Assets import
 import Near from "../../../public/assets/images/near.svg";
@@ -19,18 +19,24 @@ import { HiDocumentText } from "react-icons/hi";
 //Utils import
 import { parseDate } from "../../utils/parse-date";
 
-const ProjectDetails = ({ isModalOpen, setIsModalOpen, projectId }) => {
-  const [project, setProject] = useState(null);
+//Dependency import
+import cryptoPrice from "crypto-price"
 
-  useLayoutEffect(() => {
-    viewFunction("getProject", { projectId })
-      .then((res) => {
-        setProject(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
+const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
+  //UseStates
+  const [nearPrice, setNearPrice] = useState(null);
+
+  //UseEffects
+  useEffect(() => {
+    (async () => {
+      const apiData = await fetch(
+        "https://api.coingecko.com/api/v3/coins/near"
+      );
+      const nearData = await apiData.json();
+
+      setNearPrice(nearData?.market_data?.current_price?.usd);
+    })();
+  }, [isModalOpen]);
 
   return (
     <Modal
@@ -76,8 +82,14 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, projectId }) => {
             </div>
           </div>
 
-          <div className="w-fit h-[2rem] p-2 bg-decentra-green rounded-lg flex items-center justify-center cursor-pointer">
-            <span>Apply</span>
+          <div
+            className={
+              `w-fit h-[2rem] p-2 rounded-lg flex items-center justify-center cursor-pointer ${project.ownerId !== wallet.getAccountId() ? "bg-decentra-green" :"bg-decentra-lightblue" } `
+            }
+          >
+            <span>
+              {project.ownerId === wallet.getAccountId() ? "Edit" : "Apply"}
+            </span>
           </div>
         </div>
 
@@ -87,6 +99,14 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, projectId }) => {
             <div className="flex gap-x-1 items-center">
               <span>{utils.format.formatNearAmount(project?.cost)}</span>
               <Image src={Near} alt="Near Logo" width={15} height={15} />
+
+              <span className="ml-2">
+                $
+                {(
+                  utils.format.formatNearAmount(project?.cost) *
+                  parseFloat(nearPrice)
+                ).toFixed(2)}
+              </span>
             </div>
           </div>
 

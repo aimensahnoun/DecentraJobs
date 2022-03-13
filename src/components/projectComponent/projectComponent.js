@@ -10,7 +10,7 @@ import { HiDocumentText } from "react-icons/hi";
 //Utils import
 import {parseDate} from "../../utils/parse-date"
 
-const ProjectComponent = ({ projectName, brief, categories, project }) => {
+const ProjectComponent = ({categories, project }) => {
   //UseStates
   const [createdDate, setDate] = useState(null);
   const [deadline, setDeadline] = useState(null);
@@ -82,7 +82,7 @@ const ProjectComponent = ({ projectName, brief, categories, project }) => {
       <ProjectDetails
         isModalOpen={isModalOpen}
         setIsModalOpen={setModalOpen}
-        projectId={project?.projectId}
+        project={project}
       />
     </div>
   );
