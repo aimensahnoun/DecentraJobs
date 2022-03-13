@@ -1,4 +1,4 @@
-import { context, u128 , RNG , datetime} from "near-sdk-as";
+import { context, u128, RNG, datetime } from "near-sdk-as";
 
 @nearBindgen
 export class Profile {
@@ -29,7 +29,9 @@ export class Project {
   ownerId: string;
   cost: u128;
   projectBrief: string;
-  projectId : u32
+  projectId: u32;
+  freelancer: null | string;
+  tags : string[]
 
   constructor(
     title: string,
@@ -45,7 +47,8 @@ export class Project {
     this.cost = cost;
     this.projectBrief = projectBrief;
     this.createdOn = timeStamp;
-    this.ownerId= context.sender;
+    this.ownerId = context.sender;
     this.projectId = new RNG<u32>(1, u32.MAX_VALUE).next();
+    this.freelancer = null;
   }
 }
