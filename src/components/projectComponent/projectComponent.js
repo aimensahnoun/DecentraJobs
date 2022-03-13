@@ -66,7 +66,7 @@ const ProjectComponent = ({categories, project }) => {
         </div>
 
         <div className="w-[30%] flex items-center gap-x-2 font-medium overflow-hidden">
-          {categories?.map((category) => {
+          {project.tags?.map((category) => {
             return (
               <div
                 key={category}

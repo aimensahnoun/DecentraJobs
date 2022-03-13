@@ -20,7 +20,7 @@ import { HiDocumentText } from "react-icons/hi";
 import { parseDate } from "../../utils/parse-date";
 
 //Dependency import
-import cryptoPrice from "crypto-price"
+import cryptoPrice from "crypto-price";
 
 const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
   //UseStates
@@ -50,42 +50,24 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
       <div className="w-[40vw] cursor-default flex flex-col gap-y-2">
         <div className="flex w-full items-center justify-between mb-[1rem]">
           <div className="flex w-[50%] gap-x-4 gap-y-2 flex-wrap">
-            <div
-              className={`w-[fit] h-[2rem] flex justify-center items-center rounded-xl p-2 bg-[#EFF5F5] `}
-            >
-              <span>Web Dev</span>
-            </div>
-            <div
-              className={`w-[fit] h-[2rem] flex justify-center items-center rounded-xl p-2 bg-[#EFF5F5] `}
-            >
-              <span>Web Dev</span>
-            </div>
-            <div
-              className={`w-[fit] h-[2rem] flex justify-center items-center rounded-xl p-2 bg-[#EFF5F5] `}
-            >
-              <span>Web Dev</span>
-            </div>
-            <div
-              className={`w-[fit] h-[2rem] flex justify-center items-center rounded-xl p-2 bg-[#EFF5F5] `}
-            >
-              <span>Web Dev</span>
-            </div>
-            <div
-              className={`w-[fit] h-[2rem] flex justify-center items-center rounded-xl p-2 bg-[#EFF5F5] `}
-            >
-              <span>Web Dev</span>
-            </div>
-            <div
-              className={`w-[fit] h-[2rem] flex justify-center items-center rounded-xl p-2 bg-[#EFF5F5] `}
-            >
-              <span>Web Dev</span>
-            </div>
+            {project.tags.map((tag, index) => {
+              return (
+                <div
+                  key={tag}
+                  className={`w-[fit] h-[2rem] flex justify-center items-center rounded-xl p-2 bg-[#EFF5F5] `}
+                >
+                  <span>{tag}</span>
+                </div>
+              );
+            })}
           </div>
 
           <div
-            className={
-              `w-fit h-[2rem] p-2 rounded-lg flex items-center justify-center cursor-pointer ${project.ownerId !== wallet.getAccountId() ? "bg-decentra-green" :"bg-decentra-lightblue" } `
-            }
+            className={`w-fit h-[2rem] p-2 rounded-lg flex items-center justify-center cursor-pointer ${
+              project.ownerId !== wallet.getAccountId()
+                ? "bg-decentra-green"
+                : "bg-decentra-lightblue"
+            } `}
           >
             <span>
               {project.ownerId === wallet.getAccountId() ? "Edit" : "Apply"}
