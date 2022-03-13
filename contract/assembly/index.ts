@@ -7,7 +7,7 @@ import {
   u128,
   ContractPromiseBatch,
   base58,
-  env
+  env,
 } from "near-sdk-as";
 
 //Models import
@@ -63,7 +63,8 @@ export function createProject(
   deadline: string,
   ownerId: string,
   projectBrief: string,
-  timestamp: string
+  timestamp: string,
+  tags: string[]
 ): boolean {
   assert(ownerId == Context.sender, "Only account holder can create a project");
   assert(
@@ -77,7 +78,8 @@ export function createProject(
     deadline,
     Context.attachedDeposit,
     projectBrief,
-    timestamp
+    timestamp,
+    tags
   );
 
   projects.set(project.projectId, project);
@@ -111,4 +113,3 @@ export function deleteProject(projectId: u32): boolean {
   }
   return false;
 }
-

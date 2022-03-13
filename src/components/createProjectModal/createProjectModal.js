@@ -2,7 +2,7 @@
 import Image from "next/image";
 
 //React import
-import { useLayoutEffect, useState, useRef } from "react";
+import { useLayoutEffect, useState, useRef, useEffect } from "react";
 
 //Near import
 import { wallet, callFunction } from "../../../near/near-setup.js";
@@ -32,6 +32,7 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [brief, setBrief] = useState(null);
   const [isDraggedEnter, setIsDraggedEnter] = useState(false);
+  const [tagsArray, setTagsArray] = useState([]);
 
   //Form hook
   const {
@@ -48,15 +49,6 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
 
     const url = brief ? await uploadFile(brief, "pdf") : "null";
 
-    console.log({
-      title,
-      description,
-      deadline,
-      ownerId: wallet.getAccountId(),
-      projectBrief: url,
-      timestamp: new Date().getTime().toString(),
-    });
-
     callFunction(
       "createProject",
       {
@@ -66,6 +58,7 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
         ownerId: wallet.getAccountId(),
         projectBrief: url,
         timestamp: new Date().getTime().toString(),
+        tags : tagsArray,
       },
       cost
     )
@@ -95,6 +88,8 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
         });
       });
   };
+
+  const tags = watch("tags");
 
   //Refs
   const briefRef = useRef(null);
@@ -131,6 +126,14 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
     let tomorrow = yyyy + "-" + mm + "-" + dd;
     setMinDate(tomorrow);
   }, []);
+
+  useEffect(() => {
+    if (!tags) return;
+    const tempTags = tags
+      .split(",")
+      .filter((tag) => tag.length > 0 && tag !== "");
+    setTagsArray(tempTags);
+  }, [tags]);
 
   //Project brief section methods
 
@@ -172,7 +175,7 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
           <div className="flex flex-col">
             <span>Project Deadline : </span>
             <input
-              {...register("deadline", { required: true})}
+              {...register("deadline", { required: true })}
               type="date"
               min={minDate}
               className="w-[20rem] h-[3rem] bg-decentra-lightblue rounded-lg p-2"
@@ -191,6 +194,22 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
             className="outline-none w-[41.5rem] h-[7rem] p-2 bg-[#E2EDEE] rounded-lg border-[2px] border-transparent focus:border-[#297979] resize-none"
           />
           {errors.description && (
+            <span className="text-red-600">This field is required</span>
+          )}
+        </div>
+
+        {/* Tags */}
+        <div className="flex flex-col">
+          <span>Tags : </span>
+          <span className="text-gray-400 text-[.8rem]">
+            Seperate tags by a comma (,)
+          </span>
+          <input
+            {...register("tags", { required: true })}
+            className="w-[41.5rem] h-[3rem] outline-none bg-decentra-lightblue rounded-lg p-2"
+            placeholder="Tags"
+          />
+          {errors.tags && (
             <span className="text-red-600">This field is required</span>
           )}
         </div>

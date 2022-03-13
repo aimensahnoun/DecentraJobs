@@ -30,7 +30,7 @@ export class Project {
   cost: u128;
   projectBrief: string;
   projectId: u32;
-  freelancer: null | string;
+  freelancer: string;
   tags : string[]
 
   constructor(
@@ -39,7 +39,8 @@ export class Project {
     deadline: string,
     cost: u128,
     projectBrief: string,
-    timeStamp: string
+    timeStamp: string,
+    tags : string[]
   ) {
     this.title = title;
     this.description = description;
@@ -49,6 +50,7 @@ export class Project {
     this.createdOn = timeStamp;
     this.ownerId = context.sender;
     this.projectId = new RNG<u32>(1, u32.MAX_VALUE).next();
-    this.freelancer = null;
+    this.freelancer = "";
+    this.tags = tags
   }
 }
