@@ -24,6 +24,7 @@ import { BsChatFill } from "react-icons/bs";
 import { useRecoilState } from "recoil";
 import { userProfile } from "../recoil/state";
 import ProfilePage from "../components/profilePage/profilePage";
+import MyProjectsContent from "../components/myProjectsContent/myProjectsContent";
 
 const Dashboard = () => {
   const [currentTab, setCurrentTab] = useState(0);
@@ -57,6 +58,8 @@ const Dashboard = () => {
         return <ProfilePage />;
       case 0:
         return <ActiveProjectContent />;
+      case 1:
+        return <MyProjectsContent />;
       default:
         return <ActiveProjectContent />;
     }
