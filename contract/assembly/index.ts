@@ -10,7 +10,7 @@ import {
 } from "near-sdk-as";
 
 //Models import
-import { Profile, Project } from "../models/models";
+import { Profile, Project, Proposal } from "../models/models";
 
 // storing userProfiles
 const userProfiles = new PersistentUnorderedMap<string, Profile>("uP");
@@ -112,4 +112,42 @@ export function deleteProject(projectId: u32): boolean {
     return true;
   }
   return false;
+}
+
+//Create Proposal
+export function createProposal(
+  projectId: u32,
+  proposalBrief: string,
+  proposalTitle: string,
+  proposalDescription: string
+): boolean {
+  const project = projects.get(projectId);
+
+  //Checking if project exist
+  assert(project != null, "Project does not exist");
+
+  if (project == null) return false;
+
+  if (project.proposals.length > 0) {
+    project.proposals.forEach((p) => {
+      //Checking if sender is already a proposal
+      assert(
+        p.freelancerId != context.sender,
+        "You have already made a proposal"
+      );
+    });
+  }
+
+  const proposal = new Proposal(
+    projectId,
+    proposalBrief,
+    proposalTitle,
+    proposalDescription
+  );
+
+  project.proposals.push(proposal);
+
+  projects.set(project.projectId, project);
+
+  return true;
 }

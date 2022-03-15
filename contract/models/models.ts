@@ -62,21 +62,17 @@ export class Proposal {
   projectId: u32;
   freelancerId: string;
   proposalId: u32;
+  proposalDescritpion: string;
   proposalBrief: string;
-  proposalCost: u128;
   proposalStatus: string;
-  constructor(
-    projectId: u32,
-    freelancerId: string,
-    proposalBrief: string,
-    proposalCost: u128,
-    proposalStatus: string
-  ) {
+  proposalTitle: string;
+  constructor(projectId: u32, proposalBrief: string, proposalTitle: string , proposalDescription: string) {
     this.projectId = projectId;
-    this.freelancerId = freelancerId;
+    this.freelancerId = context.sender;
     this.proposalBrief = proposalBrief;
-    this.proposalCost = proposalCost;
-    this.proposalStatus = proposalStatus;
+    this.proposalStatus = "SUBMITTED";
     this.proposalId = new RNG<u32>(1, u32.MAX_VALUE).next();
+    this.proposalTitle = proposalTitle;
+    this.proposalDescritpion = proposalDescription;
   }
 }
