@@ -65,6 +65,7 @@ const ActiveProjectContent = () => {
                 viewFunction("getAllProject")
                   .then((res) => {
                     setProjects(res);
+                    setFilteredProjects(res);
                   })
                   .catch((err) => {
                     console.log(err);

@@ -6,7 +6,6 @@ import {
   PersistentUnorderedMap,
   u128,
   ContractPromiseBatch,
-  base58,
   env,
 } from "near-sdk-as";
 
@@ -107,6 +106,7 @@ export function deleteProject(projectId: u32): boolean {
       "Only project owner can delete it!"
     );
 
+    ContractPromiseBatch.create(context.sender).transfer(project.cost);
     projects.delete(projectId);
 
     return true;
