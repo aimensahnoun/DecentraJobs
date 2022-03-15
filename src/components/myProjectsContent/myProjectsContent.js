@@ -65,7 +65,8 @@ const MyProjectsContent = () => {
               onFocus={() => {
                 viewFunction("getAllProject")
                   .then((res) => {
-                    setProjects(res);
+                    const myProjects = res.filter((project) => project.ownerId == wallet.getAccountId());
+                    setProjects(myProjects);
                   })
                   .catch((err) => {
                     console.log(err);

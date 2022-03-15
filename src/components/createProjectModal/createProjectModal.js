@@ -63,6 +63,7 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
       cost
     )
       .then((data) => {
+        console.log
         toast.success("Project Created Successfully", {
           position: "top-right",
           autoClose: 5000,
