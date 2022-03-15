@@ -27,45 +27,45 @@ const ApplicationForm = ({ setIsApplying, projectId }) => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-//   const onSubmit = async (data) => {
-//     if (isSubmitting) return;
-//     setIsSubmitting(true);
+  const onSubmit = async (data) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
-//     const { title, description } = data;
+    const { title, description } = data;
 
-//     const url = brief ? await uploadFile(brief, "pdf") : "null";
+    const url = brief ? await uploadFile(brief, "pdf") : "null";
 
-//     callFunction("createProposal", {
-//       projectId: projectId,
-//       proposalTitle: title,
-//       proposalDescription: description,
-//       proposalBrief: url,
-//     })
-//       .then((data) => {
-//         toast.success("Proposal Created Successfully", {
-//           position: "top-right",
-//           autoClose: 5000,
-//           hideProgressBar: false,
-//           closeOnClick: true,
-//           pauseOnHover: true,
-//           draggable: true,
-//           progress: undefined,
-//         });
-//         setIsSubmitting(false);
-//       })
-//       .catch((err) => {
-//         setIsSubmitting(false);
-//         toast.error(err.kind.ExecutionError.split(",")[0], {
-//           position: "top-right",
-//           autoClose: 5000,
-//           hideProgressBar: false,
-//           closeOnClick: true,
-//           pauseOnHover: true,
-//           draggable: true,
-//           progress: undefined,
-//         });
-//       });
-//   };
+    callFunction("createProposal", {
+      projectId: projectId,
+      proposalTitle: title,
+      proposalDescription: description,
+      proposalBrief: url,
+    })
+      .then((data) => {
+        toast.success("Proposal Created Successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setIsSubmitting(false);
+      })
+      .catch((err) => {
+        setIsSubmitting(false);
+        toast.error(err.kind.ExecutionError.split(",")[0], {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+  };
 
   //Refs
   const briefRef = useRef(null);

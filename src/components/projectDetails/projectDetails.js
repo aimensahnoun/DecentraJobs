@@ -38,6 +38,10 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
     })();
   }, [isModalOpen]);
 
+  useEffect(() => {
+    if (!isModalOpen) setIsApplying(false);
+  }, [isModalOpen]);
+
   return (
     <Modal
       isOpen={isModalOpen}
@@ -163,7 +167,10 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
           </div>{" "}
         </>
       ) : (
-        <ApplicationForm setIsApplying={setIsApplying}  projectId={project.projectId} />
+        <ApplicationForm
+          setIsApplying={setIsApplying}
+          projectId={project.projectId}
+        />
       )}
     </Modal>
   );
