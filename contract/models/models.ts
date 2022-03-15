@@ -31,7 +31,8 @@ export class Project {
   projectBrief: string;
   projectId: u32;
   freelancer: string;
-  tags : string[]
+  tags: string[];
+  proposals: Proposal[];
 
   constructor(
     title: string,
@@ -40,7 +41,7 @@ export class Project {
     cost: u128,
     projectBrief: string,
     timeStamp: string,
-    tags : string[]
+    tags: string[]
   ) {
     this.title = title;
     this.description = description;
@@ -51,6 +52,31 @@ export class Project {
     this.ownerId = context.sender;
     this.projectId = new RNG<u32>(1, u32.MAX_VALUE).next();
     this.freelancer = "";
-    this.tags = tags
+    this.tags = tags;
+    this.proposals = [];
+  }
+}
+
+@nearBindgen
+export class Proposal {
+  projectId: u32;
+  freelancerId: string;
+  proposalId: u32;
+  proposalBrief: string;
+  proposalCost: u128;
+  proposalStatus: string;
+  constructor(
+    projectId: u32,
+    freelancerId: string,
+    proposalBrief: string,
+    proposalCost: u128,
+    proposalStatus: string
+  ) {
+    this.projectId = projectId;
+    this.freelancerId = freelancerId;
+    this.proposalBrief = proposalBrief;
+    this.proposalCost = proposalCost;
+    this.proposalStatus = proposalStatus;
+    this.proposalId = new RNG<u32>(1, u32.MAX_VALUE).next();
   }
 }

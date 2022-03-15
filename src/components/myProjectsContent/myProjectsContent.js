@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 
 //Near import
-import { viewFunction , wallet} from "../../../near/near-setup";
+import { viewFunction, wallet } from "../../../near/near-setup";
 
 //Icons import
 import { AiOutlineSearch } from "react-icons/ai";
@@ -21,7 +21,9 @@ const MyProjectsContent = () => {
   useEffect(() => {
     viewFunction("getAllProject")
       .then((res) => {
-        const myProjects = res.filter((project) => project.ownerId == wallet.getAccountId());
+        const myProjects = res.filter(
+          (project) => project.ownerId == wallet.getAccountId()
+        );
         setProjects(myProjects);
         setFilteredProjects(myProjects);
       })
@@ -40,8 +42,8 @@ const MyProjectsContent = () => {
             project.description.toLowerCase().includes(search.toLowerCase()) ||
             project.tags
               ?.map((tag) => tag.toLowerCase())
-              .includes(search.toLowerCase())
-              || project.ownerId.toLowerCase().includes(search.toLowerCase())
+              .includes(search.toLowerCase()) ||
+            project.ownerId.toLowerCase().includes(search.toLowerCase())
           );
         })
       );
@@ -55,9 +57,7 @@ const MyProjectsContent = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-[2rem]">
         <div className="flex gap-x-16 items-center">
-          <span className="text-[1.5rem] text-decentra-green">
-            My Projects
-          </span>
+          <span className="text-[1.5rem] text-decentra-green">My Projects</span>
           <div className="w-[25rem] h-[3rem] rounded-lg shadow-decentra p-2 flex items-center">
             <AiOutlineSearch className="text-[1.5rem] text-decentra-green mr-2" />
             <input
@@ -65,7 +65,9 @@ const MyProjectsContent = () => {
               onFocus={() => {
                 viewFunction("getAllProject")
                   .then((res) => {
-                    const myProjects = res.filter((project) => project.ownerId == wallet.getAccountId());
+                    const myProjects = res.filter(
+                      (project) => project.ownerId == wallet.getAccountId()
+                    );
                     setProjects(myProjects);
                   })
                   .catch((err) => {
