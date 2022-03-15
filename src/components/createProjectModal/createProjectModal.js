@@ -63,7 +63,7 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
       cost
     )
       .then((data) => {
-        console.log
+        
         toast.success("Project Created Successfully", {
           position: "top-right",
           autoClose: 5000,
@@ -76,7 +76,7 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
         setIsSubmitting(false);
       })
       .catch((err) => {
-        console.log(err);
+        
         setIsSubmitting(false);
         toast.error("Something went wrong!", {
           position: "top-right",
