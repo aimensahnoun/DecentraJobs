@@ -33,6 +33,7 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
   const [brief, setBrief] = useState(null);
   const [isDraggedEnter, setIsDraggedEnter] = useState(false);
   const [tagsArray, setTagsArray] = useState([]);
+  const [priceInDollars, setPriceInDollars] = useState("");
 
   //Form hook
   const {
@@ -58,12 +59,11 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
         ownerId: wallet.getAccountId(),
         projectBrief: url,
         timestamp: new Date().getTime().toString(),
-        tags : tagsArray,
+        tags: tagsArray,
       },
       cost
     )
       .then((data) => {
-        
         toast.success("Project Created Successfully", {
           position: "top-right",
           autoClose: 5000,
@@ -76,7 +76,6 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
         setIsSubmitting(false);
       })
       .catch((err) => {
-        
         setIsSubmitting(false);
         toast.error("Something went wrong!", {
           position: "top-right",
@@ -91,6 +90,8 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
   };
 
   const tags = watch("tags");
+
+  const cost = watch("cost");
 
   //Refs
   const briefRef = useRef(null);
@@ -135,6 +136,22 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
       .filter((tag) => tag.length > 0 && tag !== "");
     setTagsArray(tempTags);
   }, [tags]);
+
+  useEffect(() => {
+    (async () => {
+      if(cost === "") return setPriceInDollars(""); 
+      const apiData = await fetch(
+        "https://api.coingecko.com/api/v3/coins/near"
+      );
+      const nearData = await apiData.json();
+
+    
+
+      setPriceInDollars(
+        (nearData?.market_data?.current_price?.usd * cost).toFixed(2)
+      );
+    })();
+  }, [cost]);
 
   //Project brief section methods
 
@@ -233,6 +250,9 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
           </div>
           {errors.cost && (
             <span className="text-red-600">{errors.cost.message}</span>
+          )}
+          {priceInDollars !== "" && (
+            <span className="text-gray-400 text-[.8rem]">{`${priceInDollars} USD`}</span>
           )}
         </div>
 
