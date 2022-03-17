@@ -139,13 +139,11 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
 
   useEffect(() => {
     (async () => {
-      if(cost === "") return setPriceInDollars(""); 
+      if (cost === "") return setPriceInDollars("");
       const apiData = await fetch(
         "https://api.coingecko.com/api/v3/coins/near"
       );
       const nearData = await apiData.json();
-
-    
 
       setPriceInDollars(
         (nearData?.market_data?.current_price?.usd * cost).toFixed(2)
