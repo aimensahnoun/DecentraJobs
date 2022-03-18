@@ -6,12 +6,12 @@ export class Profile {
   bio: string;
   avatarUrl: string;
   skills: string[];
+  appliedProjects : u32[] = [];
   constructor(
     fullName: string,
     bio: string,
     avatarUrl: string,
     skills: string[],
-    walletID: string
   ) {
     this.fullName = fullName;
     this.bio = bio;

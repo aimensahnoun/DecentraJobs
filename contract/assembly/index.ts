@@ -39,10 +39,7 @@ export function createProfile(
   logging.log(user);
   assert(user == null, "User already has a profile");
 
-  userProfiles.set(
-    accountId,
-    new Profile(fullName, bio, avatarUrl, skills, accountId)
-  );
+  userProfiles.set(accountId, new Profile(fullName, bio, avatarUrl, skills));
 }
 
 //Delete profile
@@ -146,6 +143,13 @@ export function createProposal(
   );
 
   project.proposals.push(proposal);
+
+  const freelancer = userProfiles.get(context.sender);
+
+  if (freelancer !== null) {
+    freelancer.appliedProjects.push(projectId);
+    userProfiles.set(context.sender, freelancer);
+  }
 
   projects.set(project.projectId, project);
 
