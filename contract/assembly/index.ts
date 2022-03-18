@@ -158,4 +158,55 @@ export function createProposal(
   return true;
 }
 
+//Change proposals status
+export function changeProposalStatus(
+  projectId: u32,
+  proposalId: u32,
+  status: string
+): boolean {
+  assert(status == "ACCEPTED" || status == "REJECTED", "Invalid status");
 
+  const project = projects.get(projectId);
+
+  assert(project != null, "Project does not exist");
+
+  if (project != null) {
+    assert(
+      project.ownerId == context.sender,
+      "Only project owner can change proposal status"
+    );
+
+    //Making sure proposal exists
+    let proposalIndex = -1;
+
+    for (let i = 0; i < project.proposals.length; i++) {
+      if (project.proposals[i].proposalId == proposalId) {
+        proposalIndex = i;
+        break;
+      }
+    }
+
+    assert(proposalIndex != -1, "Proposal does not exist");
+
+    if (proposalIndex != -1) {
+      //If proposal is accpted , all other proposals are rejected
+      if (status == "ACCEPTED") {
+        for (let i = 0; i < project.proposals.length; i++) {
+          if (project.proposals[i].proposalId == proposalId) {
+            //Accepting selecting proposal
+            project.proposals[i].proposalStatus = "ACCEPTED";
+          } else {
+            //Rejecting other proposals
+            project.proposals[i].proposalStatus = "REJECTED";
+          }
+        }
+      }else{
+        //Rejecting proposal
+        project.proposals[proposalIndex].proposalStatus = "REJECTED";
+      }
+
+      projects.set(project.projectId, project);
+    }
+  }
+  return true;
+}
