@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 //React import
 import { useState, useEffect } from "react";
 
@@ -8,15 +9,21 @@ import { viewFunction, wallet } from "../../../near/near-setup";
 import { AiOutlineSearch } from "react-icons/ai";
 import { IoMdAdd } from "react-icons/io";
 
+//Assets import
+import NoProject from "../../../public/assets/images/noProject.svg";
 //Component import
 import ProjectComponent from "../projectComponent/projectComponent";
 import CreateProjectModal from "../createProjectModal/createProjectModal";
+import DecentraImage from "../decentraImage/decentraImage";
 
 const MyProjectsContent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projects, setProjects] = useState(null);
   const [search, setSearch] = useState("");
   const [filteredProjects, setFilteredProjects] = useState(projects);
+
+
+  console.log("image" , NoProject)
 
   useEffect(() => {
     viewFunction("getAllProject")
@@ -93,13 +100,18 @@ const MyProjectsContent = () => {
 
       {/* Content */}
       <div className="flex flex-col gap-y-4">
-        {projects !== null
-          ? filteredProjects?.map((project) => {
-              return (
-                <ProjectComponent key={project.projectId} project={project} />
-              );
-            })
-          : null}
+        {projects !== null && projects.length > 0 ? (
+          filteredProjects?.map((project) => {
+            return (
+              <ProjectComponent key={project.projectId} project={project} />
+            );
+          })
+        ) : (
+          <div className="w-full h-[calc(100vh-20rem)] items-center justify-center flex flex-col">
+            <img src="/assets/images/noProject.svg" alt="noProject"  className="w-[25rem] h-[25rem]"/>
+            <span>You do not have any projects</span>
+          </div>
+        )}
       </div>
 
       <CreateProjectModal

@@ -39,8 +39,8 @@ const ActiveProjectContent = () => {
             project.description.toLowerCase().includes(search.toLowerCase()) ||
             project.tags
               ?.map((tag) => tag.toLowerCase())
-              .includes(search.toLowerCase())
-              || project.ownerId.toLowerCase().includes(search.toLowerCase())
+              .includes(search.toLowerCase()) ||
+            project.ownerId.toLowerCase().includes(search.toLowerCase())
           );
         })
       );
@@ -90,16 +90,22 @@ const ActiveProjectContent = () => {
 
       {/* Content */}
       <div className="flex flex-col gap-y-4">
-        {projects !== null
-          ? filteredProjects?.map((project) => {
-              return (
-                <ProjectComponent
-                  key={project.projectId}
-                  project={project}
-                />
-              );
-            })
-          : null}
+        {projects !== null && projects.length > 0 ? (
+          filteredProjects?.map((project) => {
+            return (
+              <ProjectComponent key={project.projectId} project={project} />
+            );
+          })
+        ) : (
+          <div className="w-full h-[calc(100vh-20rem)] items-center justify-center flex flex-col">
+            <img
+              src="/assets/images/noProject.svg"
+              alt="noProject"
+              className="w-[25rem] h-[25rem]"
+            />
+            <span>There are no active projects.</span>
+          </div>
+        )}
       </div>
 
       <CreateProjectModal

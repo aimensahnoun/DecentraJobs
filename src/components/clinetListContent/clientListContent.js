@@ -100,13 +100,22 @@ const ClientListContent = () => {
 
       {/* Content */}
       <div className="flex flex-col gap-y-4">
-        {projects !== null
-          ? filteredProjects?.map((project) => {
-              return (
-                <ProjectComponent key={project.projectId} project={project} />
-              );
-            })
-          : null}
+        {projects !== null && projects.length > 0 ? (
+          filteredProjects?.map((project) => {
+            return (
+              <ProjectComponent key={project.projectId} project={project} />
+            );
+          })
+        ) : (
+          <div className="w-full h-[calc(100vh-20rem)] items-center justify-center flex flex-col">
+            <img
+              src="/assets/images/noProject.svg"
+              alt="noProject"
+              className="w-[25rem] h-[25rem]"
+            />
+            <span>You have not applied to any project.</span>
+          </div>
+        )}
       </div>
 
       <CreateProjectModal
