@@ -221,6 +221,67 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                 </div>
               </>
             )}
+
+            {project.proposals.length > 0 &&
+              project.proposals
+                .filter(
+                  (proposal) => proposal.freelancerId === wallet.getAccountId()
+                )
+                .map((p, index) => {
+                  return (
+                    <>
+                      <hr className="my-4 border-decentra-lightblue border-[1px]" />
+                      <span className="font-medium">My Proposal:</span>
+                      <div className="flex flex-col gap-y-2">
+                        <div
+                          key={index}
+                          className="transition-all duration-300"
+                          onClick={(e) => {
+                            e.currentTarget.children[1].classList.toggle(
+                              "hidden"
+                            );
+                          }}
+                        >
+                          <div className="flex justify-between items-center cursor-pointer ">
+                            <div className="flex flex-col">
+                              <span className="font-medium">
+                                {p.proposalTitle}
+                              </span>
+                              <span>{p.freelancerId}</span>
+                            </div>
+                            <div className="flex gap-x-2 items-center">
+                              <span
+                                className={`${
+                                  p.proposalStatus === "REJECTED"
+                                    ? "text-red-600"
+                                    : p.proposalStatus === "ACCEPTED"
+                                    ? "text-decentra-green"
+                                    : "text-yellow-500"
+                                }`}
+                              >
+                                {p.proposalStatus}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="border-t-[1px] py-2 hidden">
+                            <span>{p.proposalDescritpion}</span>
+                            {p.proposalBrief !== "null" && (
+                              <div
+                                className="flex items-center gap-x-2 text-decentra-green cursor-pointer w-fit"
+                                onClick={() =>
+                                  window.open(p.proposalBrief, "_blank")
+                                }
+                              >
+                                <HiDocumentText className="text-[1.5rem]" />
+                                <span>Download proposal</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })}
           </div>{" "}
         </>
       ) : (
