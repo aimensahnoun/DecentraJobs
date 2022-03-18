@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 
 //Near import
-import { viewFunction } from "../../../near/near-setup";
+import { viewFunction, wallet } from "../../../near/near-setup";
 
 //Icons import
 import { AiOutlineSearch } from "react-icons/ai";
@@ -12,21 +12,42 @@ import { IoMdAdd } from "react-icons/io";
 import ProjectComponent from "../projectComponent/projectComponent";
 import CreateProjectModal from "../createProjectModal/createProjectModal";
 
-const ActiveProjectContent = () => {
+//Recoil import
+import { useRecoilState } from "recoil";
+import { userProfile } from "../../recoil/state";
+
+const ClientListContent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projects, setProjects] = useState(null);
   const [search, setSearch] = useState("");
   const [filteredProjects, setFilteredProjects] = useState(projects);
 
-  useEffect(() => {
-    viewFunction("getAllProject")
-      .then((res) => {
-        setProjects(res);
-        setFilteredProjects(res);
+  const [user, setUser] = useRecoilState(userProfile);
+
+  //Funciont to get user data as well as applied projects
+  const fetchNeededData = () => {
+    viewFunction("getProfile", { accountId: wallet.getAccountId() })
+      .then((result) => {
+        setUser(result);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((e) => console.log(e))
+      .then(() => {
+        viewFunction("getAllProject")
+          .then((res) => {
+            const myProjects = res.filter((project) =>
+              user.appliedProjects.includes(project.projectId)
+            );
+            setProjects(myProjects);
+            setFilteredProjects(myProjects);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       });
+  };
+
+  useEffect(() => {
+    fetchNeededData();
   }, []);
 
   useEffect(() => {
@@ -39,37 +60,26 @@ const ActiveProjectContent = () => {
             project.description.toLowerCase().includes(search.toLowerCase()) ||
             project.tags
               ?.map((tag) => tag.toLowerCase())
-              .includes(search.toLowerCase())
-              || project.ownerId.toLowerCase().includes(search.toLowerCase())
+              .includes(search.toLowerCase()) ||
+            project.ownerId.toLowerCase().includes(search.toLowerCase())
           );
         })
       );
     }
   }, [search]);
 
-  console.log(filteredProjects);
-
   return (
     <div className="w-[calc(100%-20rem)] h-full py-[4rem] px-[2rem]">
       {/* Header */}
       <div className="flex items-center justify-between mb-[2rem]">
         <div className="flex gap-x-16 items-center">
-          <span className="text-[1.5rem] text-decentra-green">
-            Active Projects
-          </span>
+          <span className="text-[1.5rem] text-decentra-green">My Projects</span>
           <div className="w-[25rem] h-[3rem] rounded-lg shadow-decentra p-2 flex items-center">
             <AiOutlineSearch className="text-[1.5rem] text-decentra-green mr-2" />
             <input
               className="outline-none w-full"
               onFocus={() => {
-                viewFunction("getAllProject")
-                  .then((res) => {
-                    setProjects(res);
-                    setFilteredProjects(res);
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
+                fetchNeededData();
               }}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Tap to search for project"
@@ -93,10 +103,7 @@ const ActiveProjectContent = () => {
         {projects !== null
           ? filteredProjects?.map((project) => {
               return (
-                <ProjectComponent
-                  key={project.projectId}
-                  project={project}
-                />
+                <ProjectComponent key={project.projectId} project={project} />
               );
             })
           : null}
@@ -110,4 +117,4 @@ const ActiveProjectContent = () => {
   );
 };
 
-export default ActiveProjectContent;
+export default ClientListContent;

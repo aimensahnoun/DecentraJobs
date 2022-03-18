@@ -25,6 +25,7 @@ import { useRecoilState } from "recoil";
 import { userProfile } from "../recoil/state";
 import ProfilePage from "../components/profilePage/profilePage";
 import MyProjectsContent from "../components/myProjectsContent/myProjectsContent";
+import ClientListContent from "../components/clinetListContent/clientListContent";
 
 const Dashboard = () => {
   const [currentTab, setCurrentTab] = useState(0);
@@ -60,6 +61,8 @@ const Dashboard = () => {
         return <ActiveProjectContent />;
       case 1:
         return <MyProjectsContent />;
+      case 2:
+        return <ClientListContent />;
       default:
         return <ActiveProjectContent />;
     }

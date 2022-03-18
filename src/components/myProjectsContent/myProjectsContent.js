@@ -96,14 +96,7 @@ const MyProjectsContent = () => {
         {projects !== null
           ? filteredProjects?.map((project) => {
               return (
-                <ProjectComponent
-                  key={project.projectId}
-                  project={project}
-                  projectName="Crypto Landing Page"
-                  createdDate="20 Jul, 2020"
-                  deadline="19 May, 2021"
-                  categories={["Web Dev", "Crypto"]}
-                />
+                <ProjectComponent key={project.projectId} project={project} />
               );
             })
           : null}

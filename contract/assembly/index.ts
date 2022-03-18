@@ -146,6 +146,8 @@ export function createProposal(
 
   const freelancer = userProfiles.get(context.sender);
 
+  assert(freelancer != null, "Freelancer does not exist");
+
   if (freelancer !== null) {
     freelancer.appliedProjects.push(projectId);
     userProfiles.set(context.sender, freelancer);
@@ -155,3 +157,5 @@ export function createProposal(
 
   return true;
 }
+
+
