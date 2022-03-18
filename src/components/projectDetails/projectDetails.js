@@ -8,13 +8,14 @@ import Modal from "../modal/modal";
 import { wallet, utils, callFunction } from "../../../near/near-setup";
 
 //React import
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 //Assets import
 import Near from "../../../public/assets/images/near.svg";
 
 //Icon import
 import { HiDocumentText } from "react-icons/hi";
+import { AiOutlineDelete } from "react-icons/ai";
 
 //Utils import
 import { parseDate } from "../../utils/parse-date";
@@ -29,9 +30,29 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
   //UseStates
   const [nearPrice, setNearPrice] = useState(null);
   const [isApplying, setIsApplying] = useState(false);
+  const [work, setWork] = useState(null);
+  const [isDraggedEnter, setIsDraggedEnter] = useState(false);
+
+  const workRef = useRef(null);
 
   //Recoil
   const user = useRecoilValue(userProfile);
+
+  const onDragEnter = (e) => {
+    e.preventDefault();
+    setIsDraggedEnter(true);
+  };
+  const onDragOver = (e) => {
+    e.preventDefault();
+  };
+  const onDrop = (e) => {
+    e.preventDefault();
+    setBrief(e.dataTransfer.files[0]);
+  };
+  const onDragLeave = (e) => {
+    e.preventDefault();
+    setIsDraggedEnter(false);
+  };
 
   //UseEffects
   useEffect(() => {
@@ -59,6 +80,16 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
     >
       {!isApplying ? (
         <>
+          <input
+            id="brief"
+            type="file"
+            ref={workRef}
+            className="hidden"
+            accept="application/pdf, .zip"
+            onChange={(e) => {
+              setWork(e.target.files[0]);
+            }}
+          />
           <span className="mb-[1rem] -mt-[1rem] font-medium">
             {project?.ownerId}
           </span>
@@ -287,6 +318,46 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                             )}
                           </div>
                         </div>
+                        {p.proposalStatus === "ACCEPTED" && (
+                          <div className="">
+                            <span className="font-medium">Submit Work:</span>
+                            {!work ? (
+                              <div
+                                onDragEnter={onDragEnter}
+                                onDragLeave={onDragLeave}
+                                onDrop={onDrop}
+                                onDragOver={onDragOver}
+                                className={`flex flex-col w-full h-[10rem] bg-decentra-lightblue border-[1px] border-decentra-green rounded-lg items-center justify-center cursor-pointer ${
+                                  isDraggedEnter
+                                    ? "border-solid"
+                                    : "border-dashed"
+                                } `}
+                                onClick={() => workRef.current.click()}
+                              >
+                                <span>Drag & Drop</span>
+                                <span>Or</span>
+                                <span>Click here</span>
+                              </div>
+                            ) : (
+                              <div className="w-full flex  flex-col gap-y-2">
+                                <div className="flex items-center mt-4 gap-x-2">
+                                  <HiDocumentText className="text-[1.5rem] text-decentra-green" />
+                                  <span>{work.name}</span>
+                                  <AiOutlineDelete
+                                    className="text-[1.5rem] cursor-pointer ml-auto"
+                                    onClick={() => {
+                                      setIsDraggedEnter(false);
+                                      setWork(null);
+                                    }}
+                                  />
+                                </div>
+                                <button className="self-center rounded-lg bg-decentra-green p-2 flex items-center justify-center">
+                                  Submit Work
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </>
                   );
