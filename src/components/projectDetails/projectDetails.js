@@ -21,10 +21,17 @@ import { parseDate } from "../../utils/parse-date";
 import { toast } from "react-toastify";
 import ApplicationForm from "../applicationForm/applicationForm";
 
+//Recoil import
+import { useRecoilValue } from "recoil";
+import { userProfile } from "../../recoil/state";
+
 const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
   //UseStates
   const [nearPrice, setNearPrice] = useState(null);
   const [isApplying, setIsApplying] = useState(false);
+
+  //Recoil
+  const user = useRecoilValue(userProfile);
 
   //UseEffects
   useEffect(() => {
@@ -70,24 +77,26 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                 })}
               </div>
               <div className="flex gap-x-2">
-                <div
-                  className={`w-fit h-[2rem] p-2 rounded-lg flex items-center justify-center cursor-pointer ${
-                    project.ownerId !== wallet.getAccountId()
-                      ? "bg-decentra-green"
-                      : "bg-decentra-lightblue"
-                  } `}
-                  onClick={() => {
-                    if (project.ownerId !== wallet.getAccountId()) {
-                      setIsApplying(true);
-                    }
-                  }}
-                >
-                  <span>
-                    {project.ownerId === wallet.getAccountId()
-                      ? "Edit"
-                      : "Apply"}
-                  </span>
-                </div>
+                {!user.appliedProjects.includes(project.projectId) && (
+                  <div
+                    className={`w-fit h-[2rem] p-2 rounded-lg flex items-center justify-center cursor-pointer ${
+                      project.ownerId !== wallet.getAccountId()
+                        ? "bg-decentra-green"
+                        : "bg-decentra-lightblue"
+                    }  `}
+                    onClick={() => {
+                      if (project.ownerId !== wallet.getAccountId()) {
+                        setIsApplying(true);
+                      }
+                    }}
+                  >
+                    <span>
+                      {project.ownerId === wallet.getAccountId()
+                        ? "Edit"
+                        : "Apply"}
+                    </span>
+                  </div>
+                )}
                 {project.ownerId === wallet.getAccountId() && (
                   <div
                     onClick={() => {
