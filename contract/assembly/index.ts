@@ -191,16 +191,20 @@ export function changeProposalStatus(
     if (proposalIndex != -1) {
       //If proposal is accpted , all other proposals are rejected
       if (status == "ACCEPTED") {
+        //Changing project status from open to ongoing
+        project.status = "ONGOING";
+
         for (let i = 0; i < project.proposals.length; i++) {
           if (project.proposals[i].proposalId == proposalId) {
             //Accepting selecting proposal
             project.proposals[i].proposalStatus = "ACCEPTED";
+            project.freelancer = project.proposals[i].freelancerId;
           } else {
             //Rejecting other proposals
             project.proposals[i].proposalStatus = "REJECTED";
           }
         }
-      }else{
+      } else {
         //Rejecting proposal
         project.proposals[proposalIndex].proposalStatus = "REJECTED";
       }
