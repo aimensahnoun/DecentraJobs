@@ -15,7 +15,17 @@ import { uploadFile } from "../../utils/file-upload";
 //Near import
 import { callFunction } from "../../../near/near-setup";
 
+//Recoil import
+import { useRecoilState } from "recoil";
+import {projectsList,updateData,userProfile} from "../../recoil/state"
+
+
 const ApplicationForm = ({ setIsApplying, projectId }) => {
+
+  //Recoil
+  const [_user, setUserProfile] = useRecoilState(userProfile);
+  const [projects, setProjects] = useRecoilState(projectsList);
+
   //UseStates
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [brief, setBrief] = useState(null);
@@ -42,6 +52,7 @@ const ApplicationForm = ({ setIsApplying, projectId }) => {
       proposalBrief: url,
     })
       .then((data) => {
+        updateData(setProjects, setUserProfile);
         toast.success("Proposal Created Successfully", {
           position: "top-right",
           autoClose: 5000,

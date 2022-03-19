@@ -26,7 +26,15 @@ import { uploadFile } from "../../utils/file-upload";
 //Toastify import
 import { toast } from "react-toastify";
 
+//Recoil import
+import { useRecoilState } from "recoil";
+import { projectsList, updateData, userProfile } from "../../recoil/state";
+
 const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
+  //Recoil
+  const [_user, setUserProfile] = useRecoilState(userProfile);
+  const [_projects, setProjects] = useRecoilState(projectsList);
+
   //UseStates
   const [minDate, setMinDate] = useState(new Date());
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -64,6 +72,7 @@ const CreateProjectModal = ({ isModalOpen, setIsModalOpen }) => {
       cost
     )
       .then((data) => {
+        updateData(setProjects, setUserProfile);
         toast.success("Project Created Successfully", {
           position: "top-right",
           autoClose: 5000,

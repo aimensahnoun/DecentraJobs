@@ -20,14 +20,18 @@ import { AiOutlineDelete } from "react-icons/ai";
 //Utils import
 import { parseDate } from "../../utils/parse-date";
 import { toast } from "react-toastify";
-import {uploadFile} from "../../utils/file-upload";
+import { uploadFile } from "../../utils/file-upload";
 import ApplicationForm from "../applicationForm/applicationForm";
 
 //Recoil import
-import { useRecoilValue } from "recoil";
-import { userProfile } from "../../recoil/state";
+import { useRecoilState } from "recoil";
+import { userProfile, projectsList, updateData } from "../../recoil/state";
 
 const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
+  //Recoil
+  const [user, setUser] = useRecoilState(userProfile);
+  const [_projects, setProjects] = useRecoilState(projectsList);
+
   //UseStates
   const [nearPrice, setNearPrice] = useState(null);
   const [isApplying, setIsApplying] = useState(false);
@@ -35,9 +39,6 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
   const [isDraggedEnter, setIsDraggedEnter] = useState(false);
 
   const workRef = useRef(null);
-
-  //Recoil
-  const user = useRecoilValue(userProfile);
 
   const onDragEnter = (e) => {
     e.preventDefault();
@@ -139,6 +140,8 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                         })
                           .then(() => {
                             setIsModalOpen(false);
+
+                            updateData(setProjects, setUser);
                             toast.success("Project Deleted Successfully", {
                               position: "top-right",
                               autoClose: 5000,
@@ -238,13 +241,15 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                           <div className="flex gap-x-2 items-center">
                             <button
                               className="h-[2rem] w-fit p-2 rounded-lg bg-red-600 flex justify-center items-center text-white"
-                              onClick={() => {
+                              onClick={(e) => {
+                                e.stopPropagation()
                                 callFunction("changeProposalStatus", {
                                   projectId: project.projectId,
                                   proposalId: proposal.proposalId,
                                   status: "REJECTED",
                                 })
                                   .then(() => {
+                                    updateData(setProjects, setUser);
                                     toast.success(
                                       "Proposal rejected Successfully",
                                       {
@@ -275,13 +280,15 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                             </button>
                             <button
                               className="h-[2rem] w-fit p-2 rounded-lg bg-decentra-green flex justify-center items-center "
-                              onClick={() => {
+                              onClick={(e) => {
+                                e.stopPropagation()
                                 callFunction("changeProposalStatus", {
                                   projectId: project.projectId,
                                   proposalId: proposal.proposalId,
                                   status: "ACCEPTED",
                                 })
                                   .then(() => {
+                                    updateData(setProjects, setUser);
                                     toast.success(
                                       "Proposal accepted Successfully",
                                       {
@@ -422,29 +429,11 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                                     }}
                                   />
                                 </div>
-                                <button className="self-center rounded-lg bg-decentra-green p-2 flex items-center justify-center" onClick={async() => {
-                                  if(!work){
-                                    toast.error("Please upload your work", {
-                                      position: "top-right",
-                                      autoClose: 5000,
-                                      hideProgressBar: false,
-                                      closeOnClick: true,
-                                      pauseOnHover: true,
-                                      draggable: true,
-                                      progress: undefined,
-                                    });
-                                    return
-                                  }
-
-                                  const workUrl = await uploadFile(work , "file");
-
-                                  callFunction("submitWork", {
-                                    projectId: project.projectId,
-                                    workUrl : workUrl,
-                                  })
-                                    .then(() => {
-                                      setIsModalOpen(false);
-                                      toast.success("Work submitted Successfully", {
+                                <button
+                                  className="self-center rounded-lg bg-decentra-green p-2 flex items-center justify-center"
+                                  onClick={async () => {
+                                    if (!work) {
+                                      toast.error("Please upload your work", {
                                         position: "top-right",
                                         autoClose: 5000,
                                         hideProgressBar: false,
@@ -453,20 +442,47 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                                         draggable: true,
                                         progress: undefined,
                                       });
+                                      return;
+                                    }
+
+                                    const workUrl = await uploadFile(
+                                      work,
+                                      "file"
+                                    );
+
+                                    callFunction("submitWork", {
+                                      projectId: project.projectId,
+                                      workUrl: workUrl,
                                     })
-                                    .catch(() => {
-                                      toast.error("Something went wrong!", {
-                                        position: "top-right",
-                                        autoClose: 5000,
-                                        hideProgressBar: false,
-                                        closeOnClick: true,
-                                        pauseOnHover: true,
-                                        draggable: true,
-                                        progress: undefined,
+                                      .then(() => {
+                                        setIsModalOpen(false);
+                                        updateData(setProjects, setUser);
+                                        toast.success(
+                                          "Work submitted Successfully",
+                                          {
+                                            position: "top-right",
+                                            autoClose: 5000,
+                                            hideProgressBar: false,
+                                            closeOnClick: true,
+                                            pauseOnHover: true,
+                                            draggable: true,
+                                            progress: undefined,
+                                          }
+                                        );
+                                      })
+                                      .catch(() => {
+                                        toast.error("Something went wrong!", {
+                                          position: "top-right",
+                                          autoClose: 5000,
+                                          hideProgressBar: false,
+                                          closeOnClick: true,
+                                          pauseOnHover: true,
+                                          draggable: true,
+                                          progress: undefined,
+                                        });
                                       });
-                                    });
-
-                                }}>
+                                  }}
+                                >
                                   Submit Work
                                 </button>
                               </div>

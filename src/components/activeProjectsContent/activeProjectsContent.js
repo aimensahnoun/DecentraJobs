@@ -12,11 +12,20 @@ import { IoMdAdd } from "react-icons/io";
 import ProjectComponent from "../projectComponent/projectComponent";
 import CreateProjectModal from "../createProjectModal/createProjectModal";
 
+//Recoil import
+import { useRecoilState } from "recoil";
+import {projectsList , updateData ,userProfile} from "../../recoil/state"
+
 const ActiveProjectContent = () => {
+  //Recoil
+  const [_user, setUserProfile] = useRecoilState(userProfile);
+  const [projects, setProjects] = useRecoilState(projectsList);
+  
+  //UseState
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [projects, setProjects] = useState(null);
   const [search, setSearch] = useState("");
   const [filteredProjects, setFilteredProjects] = useState(projects);
+
 
   useEffect(() => {
     viewFunction("getAllProject")
@@ -45,7 +54,7 @@ const ActiveProjectContent = () => {
         })
       );
     }
-  }, [search]);
+  }, [search , projects]);
 
   console.log(filteredProjects);
 
@@ -66,6 +75,7 @@ const ActiveProjectContent = () => {
                   .then((res) => {
                     setProjects(res);
                     setFilteredProjects(res);
+                    updateData(setProjects, setUserProfile);
                   })
                   .catch((err) => {
                     console.log(err);
