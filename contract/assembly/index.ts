@@ -235,3 +235,25 @@ export function submitWork(projectId: u32, workUrl: string): boolean {
 
   return true;
 }
+
+//Complete project and get payment
+export function completeProject(projectId: u32): boolean {
+  const project = projects.get(projectId);
+
+  assert(project != null, "Project does not exist");
+
+  if (project != null) {
+    assert(project.status == "COMPLETED", "Project is not completed");
+    
+    assert(
+      project.ownerId == context.sender,
+      "Only owner can complete project"
+    );
+
+    project.status = "CLOSED";
+    ContractPromiseBatch.create(project.freelancer).transfer(project.cost)
+    projects.set(project.projectId, project);
+  }
+
+  return true;
+}
