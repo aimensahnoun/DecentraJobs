@@ -108,7 +108,7 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                 })}
               </div>
               <div className="flex gap-x-2">
-                {!user.appliedProjects.includes(project.projectId) && (
+                {!user.appliedProjects.includes(project.projectId) && project.status === "OPEN" && (
                   <div
                     className={`w-fit h-[2rem] p-2 rounded-lg flex items-center justify-center cursor-pointer ${
                       project.ownerId !== wallet.getAccountId()
@@ -128,7 +128,7 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                     </span>
                   </div>
                 )}
-                {project.ownerId === wallet.getAccountId() && (
+                {project.ownerId === wallet.getAccountId() && project.status === "OPEN" && (
                   <div
                     onClick={() => {
                       callFunction("deleteProject", {
