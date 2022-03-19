@@ -214,3 +214,24 @@ export function changeProposalStatus(
   }
   return true;
 }
+
+//Submiting work for project
+export function submitWork(projectId: u32, workUrl: string): boolean {
+  const project = projects.get(projectId);
+
+  assert(project != null, "Project does not exist");
+
+  if (project != null) {
+    assert(
+      project.freelancer == context.sender,
+      "Only freelancer can submit work"
+    );
+
+    project.workResult = workUrl;
+    project.status = "COMPLETED";
+
+    projects.set(project.projectId, project);
+  }
+
+  return true;
+}
