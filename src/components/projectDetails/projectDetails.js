@@ -20,6 +20,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 //Utils import
 import { parseDate } from "../../utils/parse-date";
 import { toast } from "react-toastify";
+import {uploadFile} from "../../utils/file-upload";
 import ApplicationForm from "../applicationForm/applicationForm";
 
 //Recoil import
@@ -421,7 +422,51 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                                     }}
                                   />
                                 </div>
-                                <button className="self-center rounded-lg bg-decentra-green p-2 flex items-center justify-center">
+                                <button className="self-center rounded-lg bg-decentra-green p-2 flex items-center justify-center" onClick={async() => {
+                                  if(!work){
+                                    toast.error("Please upload your work", {
+                                      position: "top-right",
+                                      autoClose: 5000,
+                                      hideProgressBar: false,
+                                      closeOnClick: true,
+                                      pauseOnHover: true,
+                                      draggable: true,
+                                      progress: undefined,
+                                    });
+                                    return
+                                  }
+
+                                  const workUrl = await uploadFile(work , "file");
+
+                                  callFunction("submitWork", {
+                                    projectId: project.projectId,
+                                    workUrl : workUrl,
+                                  })
+                                    .then(() => {
+                                      setIsModalOpen(false);
+                                      toast.success("Work submitted Successfully", {
+                                        position: "top-right",
+                                        autoClose: 5000,
+                                        hideProgressBar: false,
+                                        closeOnClick: true,
+                                        pauseOnHover: true,
+                                        draggable: true,
+                                        progress: undefined,
+                                      });
+                                    })
+                                    .catch(() => {
+                                      toast.error("Something went wrong!", {
+                                        position: "top-right",
+                                        autoClose: 5000,
+                                        hideProgressBar: false,
+                                        closeOnClick: true,
+                                        pauseOnHover: true,
+                                        draggable: true,
+                                        progress: undefined,
+                                      });
+                                    });
+
+                                }}>
                                   Submit Work
                                 </button>
                               </div>
