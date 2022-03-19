@@ -6,12 +6,12 @@ export class Profile {
   bio: string;
   avatarUrl: string;
   skills: string[];
-  appliedProjects : u32[] = [];
+  appliedProjects: u32[] = [];
   constructor(
     fullName: string,
     bio: string,
     avatarUrl: string,
-    skills: string[],
+    skills: string[]
   ) {
     this.fullName = fullName;
     this.bio = bio;
@@ -27,6 +27,8 @@ export class Project {
   deadline: string;
   createdOn: string;
   ownerId: string;
+  status: string;
+  workResult: string;
   cost: u128;
   projectBrief: string;
   projectId: u32;
@@ -54,6 +56,8 @@ export class Project {
     this.freelancer = "";
     this.tags = tags;
     this.proposals = [];
+    this.status = "OPEN";
+    this.workResult = "";
   }
 }
 
@@ -66,7 +70,12 @@ export class Proposal {
   proposalBrief: string;
   proposalStatus: string;
   proposalTitle: string;
-  constructor(projectId: u32, proposalBrief: string, proposalTitle: string , proposalDescription: string) {
+  constructor(
+    projectId: u32,
+    proposalBrief: string,
+    proposalTitle: string,
+    proposalDescription: string
+  ) {
     this.projectId = projectId;
     this.freelancerId = context.sender;
     this.proposalBrief = proposalBrief;

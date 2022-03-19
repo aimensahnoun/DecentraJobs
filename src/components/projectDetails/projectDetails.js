@@ -233,10 +233,66 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                             <span>{proposal.freelancerId}</span>
                           </div>
                           <div className="flex gap-x-2 items-center">
-                            <button className="h-[2rem] w-fit p-2 rounded-lg bg-red-600 flex justify-center items-center text-white">
+                            <button className="h-[2rem] w-fit p-2 rounded-lg bg-red-600 flex justify-center items-center text-white" onClick={() => {
+                              callFunction("changeProposalStatus", {
+                                projectId: project.projectId,
+                                proposalId : proposal.proposalId,
+                                status: "REJECTED",
+                              })
+                                .then(() => {
+                                  toast.success("Proposal rejected Successfully", {
+                                    position: "top-right",
+                                    autoClose: 5000,
+                                    hideProgressBar: false,
+                                    closeOnClick: true,
+                                    pauseOnHover: true,
+                                    draggable: true,
+                                    progress: undefined,
+                                  });
+                                })
+                                .catch(() => {
+                                  toast.error("Something went wrong!", {
+                                    position: "top-right",
+                                    autoClose: 5000,
+                                    hideProgressBar: false,
+                                    closeOnClick: true,
+                                    pauseOnHover: true,
+                                    draggable: true,
+                                    progress: undefined,
+                                  });
+                                });
+                            }}>
                               Reject
                             </button>
-                            <button className="h-[2rem] w-fit p-2 rounded-lg bg-decentra-green flex justify-center items-center ">
+                            <button className="h-[2rem] w-fit p-2 rounded-lg bg-decentra-green flex justify-center items-center "  onClick={() => {
+                               callFunction("changeProposalStatus", {
+                                projectId: project.projectId,
+                                proposalId : proposal.proposalId,
+                                status: "ACCEPTED",
+                              })
+                                .then(() => {
+                                  toast.success("Proposal accepted Successfully", {
+                                    position: "top-right",
+                                    autoClose: 5000,
+                                    hideProgressBar: false,
+                                    closeOnClick: true,
+                                    pauseOnHover: true,
+                                    draggable: true,
+                                    progress: undefined,
+                                  });
+                                })
+                                .catch(() => {
+                                  toast.error("Something went wrong!", {
+                                    position: "top-right",
+                                    autoClose: 5000,
+                                    hideProgressBar: false,
+                                    closeOnClick: true,
+                                    pauseOnHover: true,
+                                    draggable: true,
+                                    progress: undefined,
+                                  });
+                                });
+                            }}>
                               Accept
                             </button>
                           </div>
