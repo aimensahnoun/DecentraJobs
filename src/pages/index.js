@@ -74,7 +74,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <nav className="w-screen h-[5rem] py-4 xl:px-[30rem] flex items-center justify-between">
+      <nav className="w-screen h-[5rem] py-4 xl:px-[5rem] 2xl:px-[30rem] flex items-center justify-between">
         <h2 className="font-medium text-decentra-green text-[1.5rem] overflow-hidden">
           <span className="letter inline-block">D</span>
           <span className="letter inline-block">e</span>
@@ -91,7 +91,7 @@ export default function Home() {
         </h2>
 
         <div
-          className="p-2 bg-decentra-green text-white rounded-lg cursor-pointer"
+          className="p-2 bg-decentra-green text-white rounded-lg cursor-pointer z-10"
           onClick={() => {
             const user = wallet.getAccountId();
             console.log(user);
@@ -118,7 +118,7 @@ export default function Home() {
       </nav>
 
       <main
-        className="w-screen xl:px-[30rem] h-[91%] bg-[#F6F6F6] py-5 flex justify-between items-center"
+        className="w-screen xl:px-[5rem] 2xl:px-[30rem] h-[91%] bg-[#F6F6F6] py-5 flex justify-between items-center"
         id="hero_section"
       >
         <section>
@@ -144,7 +144,7 @@ export default function Home() {
         <Image
           src={Hero}
           alt="hero"
-          className="w-[50%] h-[10rem]"
+          className="w-[30%] xl:h-[5rem] 2xl:h-[10rem]"
           width="500"
         />
       </main>

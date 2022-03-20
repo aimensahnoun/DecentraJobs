@@ -25,30 +25,30 @@ const ProjectComponent = ({categories, project }) => {
 
   return (
     <div
-      className="w-full h-[6rem] shadow-decentra rounded-lg p-4 flex flex-col justify-between cursor-pointer"
+      className="w-full min-h-[6rem] shadow-decentra rounded-lg p-4 flex flex-col justify-between cursor-pointer"
       onClick={() => setModalOpen(true)}
     >
       {/* Titles */}
       <div className="w-full flex items-center">
         <span className="w-[20%]">Project Name</span>
-        <span className="w-[20%]">Date Created</span>
-        <span className="w-[20%]">Deadline</span>
-        <span className="w-[10%]">Project Brief</span>
-        <span className="w-[30%]">Category</span>
+        <span className="xl:w-[13%] 2xl:w-[20%]">Date Created</span>
+        <span className="xl:w-[13%] 2xl:w-[20%]">Deadline</span>
+        <span className="xl:w-[14%] 2xl:w-[10%]">Project Brief</span>
+        <span className="xl:w-[40%] 2xl:w-[30%]">Category</span>
       </div>
       {/* Data */}
       <div className="w-full flex items-center">
-        <span className="w-[20%] text-decentra-green font-medium">
+        <span className="w-[20%] text-decentra-green font-medium text-ellipsis overflow-hidden whitespace-nowrap">
           {project.title}
         </span>
-        <span className="w-[20%] text-decentra-green font-medium">
+        <span className="xl:w-[13%] 2xl:w-[20%] text-decentra-green font-medium">
           {createdDate}
         </span>
-        <span className="w-[20%] text-decentra-green font-medium">
+        <span className="xl:w-[13%] 2xl:w-[20%] text-decentra-green font-medium">
           {deadline}
         </span>
 
-        <div className="w-[10%] text-decentra-green font-medium flex items-center gap-x-2 cursor-pointer">
+        <div className="xl:w-[14%] 2xl:w-[10%] text-decentra-green font-medium flex items-center gap-x-2 cursor-pointer">
           {project.projectBrief != "null" ? (
             <div
               className="flex"
@@ -65,7 +65,7 @@ const ProjectComponent = ({categories, project }) => {
           )}
         </div>
 
-        <div className="w-[30%] flex items-center gap-x-2 font-medium overflow-hidden">
+        <div className="xl:w-[40%] 2xl:w-[30%] flex items-center gap-x-2 font-medium overflow-hidden">
           {project.tags?.map((category) => {
             return (
               <div

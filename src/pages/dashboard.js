@@ -77,14 +77,14 @@ const Dashboard = () => {
       </Head>
 
       {/* Sidebar */}
-      <nav className="w-[20rem] h-full bg-[#EFF5F5] flex flex-col items-center py-[4rem] gap-y-8">
+      <nav className="xl:w-[15rem]  2xl:w-[20rem] h-full bg-[#EFF5F5] flex flex-col items-center py-[4rem] gap-y-8">
         <span className="font-medium text-decentra-green text-[1.5rem]">
           DecentraJobs
         </span>
 
         {/* Profile tab section */}
         <div
-          className="w-[65%] bg-white rounded-lg h-[4rem] shadow-md flex gap-x-2 items-center justify-center cursor-pointer"
+          className="xl:w-[90%]  2xl:w-[65%] bg-white rounded-lg h-[4rem] shadow-md flex gap-x-2 items-center justify-center cursor-pointer"
           onClick={() => setCurrentTab(-1)}
         >
           <div className="w-[2.5rem] h-[2.5rem] rounded-full bg-decentra-gray">
@@ -97,7 +97,7 @@ const Dashboard = () => {
             />
           </div>
           <div className="flex flex-col">
-            <span className="text-decentra-green font-medium">
+            <span className="text-decentra-green font-medium ">
               {user.fullName}
             </span>
             <span className="text-[.8rem]">{wallet.getAccountId()}</span>
@@ -106,7 +106,7 @@ const Dashboard = () => {
 
         {/* Navigation tabs sections */}
 
-        <div className="w-full items-center flex flex-col gap-y-2">
+        <div className="w-full px-4 2xl:items-center flex flex-col gap-y-2">
           <NavItem
             Icon={CgBriefcase}
             isActive={currentTab === 0}
@@ -137,7 +137,7 @@ const Dashboard = () => {
 
         {/* Logout section */}
         <div
-          className="w-[60%] h-[4rem] mt-auto gap-x-6 bg-white rounded-lg shadow-md flex items-center justify-center cursor-pointer"
+          className="xl:w-[90%] 2xl:w-[60%] h-[4rem] mt-auto gap-x-6 bg-white rounded-lg shadow-md flex items-center justify-center cursor-pointer"
           onClick={() => {
             signOut();
             router.replace("/");
