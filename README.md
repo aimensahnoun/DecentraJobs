@@ -60,8 +60,8 @@ NEXT_PUBLIC_STORAGE_API = "API_KEY"
 ## How Does It Work? (Technical)
 
 These following technologies have been used in this project:
-1. [NextJS](https://nextjs.org): used as a front-end for the project
-2. [Recoil](https://recoiljs.org) : used as a state management solution for the proejct
+1. [NextJS](https://nextjs.org): used as a front-end for the project.
+2. [Recoil](https://recoiljs.org) : used as a state management solution for the proejct.
 3. [We3Storage](https://web3.storage) : used to store all files such as images, pdfs , and zip files in a decentralized fashion.
 4. [Near](https://near.org) : Used to to handle authentication , payment , as well as storing all of the user profile , project data on chain.
 
