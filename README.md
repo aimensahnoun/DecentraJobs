@@ -1,9 +1,19 @@
 # DecentraJobs
-**DecentraJobs ** is a freelancing platform built on top of the Near platform, Allowing users to either hire skilled freelancers for jobs as well find interesting jobs in many fields and get hired.
+
+[![DecentraJobs](https://user-images.githubusercontent.com/62159014/159171316-9557aeb3-c4f5-4f31-9a88-15e0f6e0054b.png)](https://www.loom.com/share/add9a201cd7542f2a9f96854da1b5acf)
+
+**DecentraJobs** is a freelancing platform built on top of the Near platform, Allowing users to either hire skilled freelancers for jobs as well find interesting jobs in many fields and get hired.
 
 Current version has very basic and bare-bones functionality.
 
+
+PS:Sorry for the messy work, there is a lot of refactoring that needs to be done.
+
 ![Screen Shot 2022-03-18 at 21.17.01.png](https://user-images.githubusercontent.com/62159014/159064120-edd966cf-1312-422b-aa2d-38a54912fa83.png)
+
+### Quick origin story:
+![Origin](https://user-images.githubusercontent.com/62159014/159162979-c467d82a-b889-46e7-bb95-2cc7315c74f0.png)
+The whole idea for this project came from the [Near Academy](https://near.academy/near101/splash-2) course,Why wait till 2025 😅.
 # Cloning the repo
 After cloning the project please run
 
@@ -43,7 +53,7 @@ NEXT_PUBLIC_STORAGE_API = "API_KEY"
 
 
 ## How Does It Work? (Theory)
-**As a job creator: ** After creating an account in DecentraJobs, anyone can create a job and hire freelances. While creating a job, the funds will be stored onto the smart contract in order to ensure that payment will happen upon job completion.
+**As a job creator:** After creating an account in DecentraJobs, anyone can create a job and hire freelances. While creating a job, the funds will be stored onto the smart contract in order to ensure that payment will happen upon job completion.
 
 **As a freelancer: ** Freelancers can browse the available list of jobs freely and apply to any job that they they are upto, optimally all jobs will have the necessary details such as expectations, payment , as well as a project brief that explains more about the job in detail.
 
@@ -65,6 +75,10 @@ So this is a general To-Do list that will hopefully be added to the project as s
 * [ ] In-Chat offers : Once getting in contact with project owners, freelancers can submit their own offer directly from the chat , giving them an easy way to ask for they want when negotiating projects.
 ![9a85576ec9ee41578d2fe29e13c5243b.png](https://user-images.githubusercontent.com/62159014/159063888-b8871e21-6b78-4d67-9db9-58cf61b7a2fa.png)
 * [ ] Milestone payment : instead of a one payment at the end of the project, project owner and freelancers can agree to split the total payment to as many steps as they want, Each payment transfered to the freelancer directly as soon as the milestone is met.
+* [ ] Profile Interactions : Unfortunately, currently only the account owner can see their profile. We want to allow users to interact with each other.
+* [ ] Direct Hiring : This would allow for anyone to directly offer an existing or new project to another use, from their profile.
+* [ ] Teams : Allow users to form a team, which will allow them to finish projects more efficently and they can split the income between them.
+* [ ] Work History: This will be shown in any freelancers profile page, to show their accomplishments and to improve their reputation within the platform. 
 
 
 
