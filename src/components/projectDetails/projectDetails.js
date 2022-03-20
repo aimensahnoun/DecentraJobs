@@ -72,6 +72,13 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
     if (!isModalOpen) setIsApplying(false);
   }, [isModalOpen]);
 
+  useEffect(() => {
+    if (project.workResult == "") return;
+    setWork(project.workResult);
+  }, [project]);
+
+  console.log(typeof(work , work))
+
   console.log(project);
 
   return (
@@ -110,8 +117,9 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                 })}
               </div>
               <div className="flex gap-x-2">
+                {/* Actions section , edit , delete and apply */}
                 {!user.appliedProjects.includes(project.projectId) &&
-                  project.status === "OPEN" && (
+                  project.status === "OPEN" ? (
                     <div
                       className={`w-fit h-[2rem] p-2 rounded-lg flex items-center justify-center cursor-pointer ${
                         project.ownerId !== wallet.getAccountId()
@@ -130,7 +138,8 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                           : "Apply"}
                       </span>
                     </div>
-                  )}
+                  ) : project.status ==="CLOSED" && <span className="text-decentra-green font-medium">COMPLETED</span>}
+                {/* Allowing owner to delete project only if no one got accepted for the job */}
                 {project.ownerId === wallet.getAccountId() &&
                   project.status === "OPEN" && (
                     <div
@@ -213,133 +222,242 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
               </>
             ) : null}
 
+            {/* Shwoing the porject owner the proposals list */}
             {project.ownerId === wallet.getAccountId() && (
               <>
                 <hr className="my-4 border-decentra-lightblue border-[1px]" />
                 <span className="font-medium">Proposals:</span>
                 <div className="flex flex-col gap-y-2">
-                  {project?.proposals.map((proposal, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className="transition-all duration-300"
-                        onClick={(e) => {
-                          console.log(
-                            e.currentTarget.children[1].classList.toggle(
-                              "hidden"
-                            )
-                          );
-                        }}
-                      >
-                        <div className="flex justify-between items-center cursor-pointer ">
-                          <div className="flex flex-col">
-                            <span className="font-medium">
-                              {proposal.proposalTitle}
-                            </span>
-                            <span>{proposal.freelancerId}</span>
-                          </div>
-                          <div className="flex gap-x-2 items-center">
-                            <button
-                              className="h-[2rem] w-fit p-2 rounded-lg bg-red-600 flex justify-center items-center text-white"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                callFunction("changeProposalStatus", {
-                                  projectId: project.projectId,
-                                  proposalId: proposal.proposalId,
-                                  status: "REJECTED",
-                                })
-                                  .then(() => {
-                                    updateData(setProjects, setUser);
-                                    toast.success(
-                                      "Proposal rejected Successfully",
-                                      {
-                                        position: "top-right",
-                                        autoClose: 5000,
-                                        hideProgressBar: false,
-                                        closeOnClick: true,
-                                        pauseOnHover: true,
-                                        draggable: true,
-                                        progress: undefined,
-                                      }
-                                    );
-                                  })
-                                  .catch(() => {
-                                    toast.error("Something went wrong!", {
-                                      position: "top-right",
-                                      autoClose: 5000,
-                                      hideProgressBar: false,
-                                      closeOnClick: true,
-                                      pauseOnHover: true,
-                                      draggable: true,
-                                      progress: undefined,
-                                    });
-                                  });
-                              }}
-                            >
-                              Reject
-                            </button>
-                            <button
-                              className="h-[2rem] w-fit p-2 rounded-lg bg-decentra-green flex justify-center items-center "
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                callFunction("changeProposalStatus", {
-                                  projectId: project.projectId,
-                                  proposalId: proposal.proposalId,
-                                  status: "ACCEPTED",
-                                })
-                                  .then(() => {
-                                    updateData(setProjects, setUser);
-                                    toast.success(
-                                      "Proposal accepted Successfully",
-                                      {
-                                        position: "top-right",
-                                        autoClose: 5000,
-                                        hideProgressBar: false,
-                                        closeOnClick: true,
-                                        pauseOnHover: true,
-                                        draggable: true,
-                                        progress: undefined,
-                                      }
-                                    );
-                                  })
-                                  .catch(() => {
-                                    toast.error("Something went wrong!", {
-                                      position: "top-right",
-                                      autoClose: 5000,
-                                      hideProgressBar: false,
-                                      closeOnClick: true,
-                                      pauseOnHover: true,
-                                      draggable: true,
-                                      progress: undefined,
-                                    });
-                                  });
-                              }}
-                            >
-                              Accept
-                            </button>
-                          </div>
-                        </div>
-                        <div className="border-t-[1px] py-2 hidden">
-                          <span>{proposal.proposalDescritpion}</span>
-                          {proposal.proposalBrief !== "null" && (
-                            <div
-                              className="flex items-center gap-x-2 text-decentra-green cursor-pointer w-fit"
-                              onClick={() =>
-                                window.open(proposal.proposalBrief, "_blank")
-                              }
-                            >
-                              <HiDocumentText className="text-[1.5rem]" />
-                              <span>Download proposal</span>
+                  {/* Showing all proposals */}
+                  {project?.status === "OPEN"
+                    ? project?.proposals.map((proposal, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className="transition-all duration-300"
+                            onClick={(e) => {
+                              console.log(
+                                e.currentTarget.children[1].classList.toggle(
+                                  "hidden"
+                                )
+                              );
+                            }}
+                          >
+                            <div className="flex justify-between items-center cursor-pointer ">
+                              <div className="flex flex-col">
+                                <span className="font-medium">
+                                  {proposal.proposalTitle}
+                                </span>
+                                <span>{proposal.freelancerId}</span>
+                              </div>
+                              <div className="flex gap-x-2 items-center">
+                                <button
+                                  className="h-[2rem] w-fit p-2 rounded-lg bg-red-600 flex justify-center items-center text-white"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    callFunction("changeProposalStatus", {
+                                      projectId: project.projectId,
+                                      proposalId: proposal.proposalId,
+                                      status: "REJECTED",
+                                    })
+                                      .then(() => {
+                                        updateData(setProjects, setUser);
+                                        toast.success(
+                                          "Proposal rejected Successfully",
+                                          {
+                                            position: "top-right",
+                                            autoClose: 5000,
+                                            hideProgressBar: false,
+                                            closeOnClick: true,
+                                            pauseOnHover: true,
+                                            draggable: true,
+                                            progress: undefined,
+                                          }
+                                        );
+                                      })
+                                      .catch(() => {
+                                        toast.error("Something went wrong!", {
+                                          position: "top-right",
+                                          autoClose: 5000,
+                                          hideProgressBar: false,
+                                          closeOnClick: true,
+                                          pauseOnHover: true,
+                                          draggable: true,
+                                          progress: undefined,
+                                        });
+                                      });
+                                  }}
+                                >
+                                  Reject
+                                </button>
+                                <button
+                                  className="h-[2rem] w-fit p-2 rounded-lg bg-decentra-green flex justify-center items-center "
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    callFunction("changeProposalStatus", {
+                                      projectId: project.projectId,
+                                      proposalId: proposal.proposalId,
+                                      status: "ACCEPTED",
+                                    })
+                                      .then(() => {
+                                        updateData(setProjects, setUser);
+                                        toast.success(
+                                          "Proposal accepted Successfully",
+                                          {
+                                            position: "top-right",
+                                            autoClose: 5000,
+                                            hideProgressBar: false,
+                                            closeOnClick: true,
+                                            pauseOnHover: true,
+                                            draggable: true,
+                                            progress: undefined,
+                                          }
+                                        );
+                                      })
+                                      .catch(() => {
+                                        toast.error("Something went wrong!", {
+                                          position: "top-right",
+                                          autoClose: 5000,
+                                          hideProgressBar: false,
+                                          closeOnClick: true,
+                                          pauseOnHover: true,
+                                          draggable: true,
+                                          progress: undefined,
+                                        });
+                                      });
+                                  }}
+                                >
+                                  Accept
+                                </button>
+                              </div>
                             </div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
+                            <div className="border-t-[1px] py-2 hidden">
+                              <span>{proposal.proposalDescritpion}</span>
+                              {proposal.proposalBrief !== "null" && (
+                                <div
+                                  className="flex items-center gap-x-2 text-decentra-green cursor-pointer w-fit"
+                                  onClick={() =>
+                                    window.open(
+                                      proposal.proposalBrief,
+                                      "_blank"
+                                    )
+                                  }
+                                >
+                                  <HiDocumentText className="text-[1.5rem]" />
+                                  <span>Download proposal</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })
+                    : // Showing only the accepted proposal
+                      project?.proposals
+                        .filter(
+                          (proposal) => proposal.proposalStatus === "ACCEPTED"
+                        )
+                        .map((proposal, index) => {
+                          return (
+                            <div
+                              key={index}
+                              className="transition-all duration-300"
+                              onClick={(e) => {
+                                console.log(
+                                  e.currentTarget.children[1].classList.toggle(
+                                    "hidden"
+                                  )
+                                );
+                              }}
+                            >
+                              <div className="flex justify-between items-center cursor-pointer ">
+                                <div className="flex flex-col">
+                                  <span className="font-medium">
+                                    {proposal.proposalTitle}
+                                  </span>
+                                  <span>{proposal.freelancerId}</span>
+                                </div>
+                                <div className="flex gap-x-2 items-center">
+                                  <span className="text-decentra-green font-medium">
+                                    ACCEPTED
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="border-t-[1px] py-2 hidden">
+                                <span>{proposal.proposalDescritpion}</span>
+                                {proposal.proposalBrief !== "null" && (
+                                  <div
+                                    className="flex items-center gap-x-2 text-decentra-green cursor-pointer w-fit"
+                                    onClick={() =>
+                                      window.open(
+                                        proposal.proposalBrief,
+                                        "_blank"
+                                      )
+                                    }
+                                  >
+                                    <HiDocumentText className="text-[1.5rem]" />
+                                    <span>Download proposal</span>
+                                  </div>
+                                )}
+                              </div>
+                              {project.workResult !== "" && (
+                                <div className="flex flex-col mt-2 gap-y-2 w-full">
+                                  <span className="font-medium">Work:</span>
+                                  <div
+                                    className="flex items-center gap-x-2 text-decentra-green cursor-pointer w-fit"
+                                    onClick={() =>
+                                      window.open(project.workResult, "_blank")
+                                    }
+                                  >
+                                    <HiDocumentText className="text-[1.5rem]" />
+                                    <span>Download Work</span>
+                                  </div>
+                                  {project.status === "COMPLETED" && <button
+                                    className="self-center rounded-lg bg-decentra-green p-2 flex items-center justify-center"
+                                    onClick={async (e) => {
+                                      e.stopPropagation()
+                                      callFunction("completeProject", {
+                                        projectId: project.projectId,
+                                      })
+                                        .then(() => {
+                                          updateData(setProjects, setUser);
+                                          toast.success(
+                                            "Project closed Successfully",
+                                            {
+                                              position: "top-right",
+                                              autoClose: 5000,
+                                              hideProgressBar: false,
+                                              closeOnClick: true,
+                                              pauseOnHover: true,
+                                              draggable: true,
+                                              progress: undefined,
+                                            }
+                                          );
+                                        })
+                                        .catch(() => {
+                                          toast.error("Something went wrong!", {
+                                            position: "top-right",
+                                            autoClose: 5000,
+                                            hideProgressBar: false,
+                                            closeOnClick: true,
+                                            pauseOnHover: true,
+                                            draggable: true,
+                                            progress: undefined,
+                                          });
+                                        });
+                                    }}
+                                  >
+                                    Payout Project
+                                  </button>}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
                 </div>
               </>
             )}
 
+            {/* Showing the freelancer his porposal */}
             {project.proposals.length > 0 &&
               project.proposals
                 .filter(
@@ -396,9 +514,12 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                             )}
                           </div>
                         </div>
+                        {/* Allowing freelancer to upload work*/}
                         {p.proposalStatus === "ACCEPTED" && (
                           <div className="">
-                            <span className="font-medium">Submit Work:</span>
+                            <span className="font-medium">
+                              {work?.name && "Submit"} Work:
+                            </span>
                             {!work ? (
                               <div
                                 onDragEnter={onDragEnter}
@@ -418,60 +539,33 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                               </div>
                             ) : (
                               <div className="w-full flex  flex-col gap-y-2">
-                                <div className="flex items-center mt-4 gap-x-2">
+                                <div
+                                  className="flex items-center mt-4 gap-x-2 cursor-pointer"
+                                  onClick={() =>
+                                    window.open(project.workResult, "_blank")
+                                  }
+                                >
                                   <HiDocumentText className="text-[1.5rem] text-decentra-green" />
-                                  <span>{work.name}</span>
-                                  <AiOutlineDelete
-                                    className="text-[1.5rem] cursor-pointer ml-auto"
-                                    onClick={() => {
-                                      setIsDraggedEnter(false);
-                                      setWork(null);
-                                    }}
-                                  />
+                                  <span>
+                                    {work && typeof(work)=="object" ? work?.name : "Download work"}
+                                  </span>
+                                  {work && typeof(work)=="object" && (
+                                    <AiOutlineDelete
+                                      className="text-[1.5rem] cursor-pointer ml-auto"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setIsDraggedEnter(false);
+                                        setWork(null);
+                                      }}
+                                    />
+                                  )}
                                 </div>
-                                <button
-                                  className="self-center rounded-lg bg-decentra-green p-2 flex items-center justify-center"
-                                  onClick={async () => {
-                                    if (!work) {
-                                      toast.error("Please upload your work", {
-                                        position: "top-right",
-                                        autoClose: 5000,
-                                        hideProgressBar: false,
-                                        closeOnClick: true,
-                                        pauseOnHover: true,
-                                        draggable: true,
-                                        progress: undefined,
-                                      });
-                                      return;
-                                    }
-
-                                    const workUrl = await uploadFile(
-                                      work,
-                                      "file"
-                                    );
-
-                                    callFunction("submitWork", {
-                                      projectId: project.projectId,
-                                      workUrl: workUrl,
-                                    })
-                                      .then(() => {
-                                        setIsModalOpen(false);
-                                        updateData(setProjects, setUser);
-                                        toast.success(
-                                          "Work submitted Successfully",
-                                          {
-                                            position: "top-right",
-                                            autoClose: 5000,
-                                            hideProgressBar: false,
-                                            closeOnClick: true,
-                                            pauseOnHover: true,
-                                            draggable: true,
-                                            progress: undefined,
-                                          }
-                                        );
-                                      })
-                                      .catch(() => {
-                                        toast.error("Something went wrong!", {
+                                {work && typeof(work)=="object" && (
+                                  <button
+                                    className="self-center rounded-lg bg-decentra-green p-2 flex items-center justify-center"
+                                    onClick={async () => {
+                                      if (!work) {
+                                        toast.error("Please upload your work", {
                                           position: "top-right",
                                           autoClose: 5000,
                                           hideProgressBar: false,
@@ -480,11 +574,50 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                                           draggable: true,
                                           progress: undefined,
                                         });
-                                      });
-                                  }}
-                                >
-                                  Submit Work
-                                </button>
+                                        return;
+                                      }
+
+                                      const workUrl = await uploadFile(
+                                        work,
+                                        "file"
+                                      );
+
+                                      callFunction("submitWork", {
+                                        projectId: project.projectId,
+                                        workUrl: workUrl,
+                                      })
+                                        .then(() => {
+                                          setIsModalOpen(false);
+                                          updateData(setProjects, setUser);
+                                          toast.success(
+                                            "Work submitted Successfully",
+                                            {
+                                              position: "top-right",
+                                              autoClose: 5000,
+                                              hideProgressBar: false,
+                                              closeOnClick: true,
+                                              pauseOnHover: true,
+                                              draggable: true,
+                                              progress: undefined,
+                                            }
+                                          );
+                                        })
+                                        .catch(() => {
+                                          toast.error("Something went wrong!", {
+                                            position: "top-right",
+                                            autoClose: 5000,
+                                            hideProgressBar: false,
+                                            closeOnClick: true,
+                                            pauseOnHover: true,
+                                            draggable: true,
+                                            progress: undefined,
+                                          });
+                                        });
+                                    }}
+                                  >
+                                    Submit Work
+                                  </button>
+                                )}
                               </div>
                             )}
                           </div>

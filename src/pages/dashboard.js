@@ -127,12 +127,12 @@ const Dashboard = () => {
             title="Client List"
           />
 
-          <NavItem
+          {/* <NavItem
             Icon={BsChatFill}
             isActive={currentTab === 3}
             onClick={() => setCurrentTab(3)}
             title="Chat"
-          />
+          /> */}
         </div>
 
         {/* Logout section */}

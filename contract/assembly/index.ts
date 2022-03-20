@@ -250,6 +250,13 @@ export function completeProject(projectId: u32): boolean {
       "Only owner can complete project"
     );
 
+    //Changing proposal status to completed
+    for(let i = 0 ; i< project.proposals.length ; i++){
+      if(project.proposals[i].proposalStatus === "Accepted") {
+        project.proposals[i].proposalStatus = "COMPLETED";
+      }
+    }
+
     project.status = "CLOSED";
     ContractPromiseBatch.create(project.freelancer).transfer(project.cost)
     projects.set(project.projectId, project);
