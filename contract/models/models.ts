@@ -7,6 +7,7 @@ export class Profile {
   avatarUrl: string;
   skills: string[];
   appliedProjects: u32[] = [];
+  portfolioProjects : PortfolioProject[] = [];
   constructor(
     fullName: string,
     bio: string,
@@ -83,5 +84,30 @@ export class Proposal {
     this.proposalId = new RNG<u32>(1, u32.MAX_VALUE).next();
     this.proposalTitle = proposalTitle;
     this.proposalDescritpion = proposalDescription;
+  }
+}
+
+@nearBindgen
+export class PortfolioProject {
+  title: string;
+  description: string;
+  creationDate: string;
+  imgUrl: string;
+  projectId: u32;
+  tags: string[];
+
+  constructor(
+    title: string,
+    description: string,
+    createdOn: string,
+    imgUrl: string,
+    tags: string[]
+  ) {
+    this.title = title;
+    this.description = description;
+    this.creationDate = createdOn;
+    this.imgUrl = imgUrl;
+    this.projectId = new RNG<u32>(1, u32.MAX_VALUE).next();
+    this.tags = tags;
   }
 }

@@ -1,17 +1,24 @@
 /* eslint-disable react/no-unescaped-entities */
+//React import
+import { useState } from "react";
+
 //Component import
 import DecentraImage from "../decentraImage/decentraImage";
+import CreatePortfolioProjectModal from "../createPortfolioProjectModal/createPortfolioProjectModal";
 
 //Near import
-import {wallet} from "../../../near/near-setup"
+import { wallet } from "../../../near/near-setup";
 
 //Recoil import
 import { useRecoilValue } from "recoil";
 import { userProfile } from "../../recoil/state";
 
 const ProfilePage = () => {
+  //Recoil state
   const user = useRecoilValue(userProfile);
-  console.log(user);
+
+  //Use State
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div className="w-[calc(100%-20rem)] h-full py-[4rem] px-[2rem]">
@@ -45,7 +52,15 @@ const ProfilePage = () => {
       <hr className="my-6 border-decentra-lightblue border-[1px]" />
 
       <div className="flex flex-col gap-y-2">
-        <span className="font-medium text-[1.2rem]">Portfolio</span>
+        <div className="flex w-full items-center justify-between">
+          <span className="font-medium text-[1.2rem]">Portfolio</span>
+          <button
+            className="h-[3rem] w-fit p-2 bg-decentra-lightblue rounded-lg"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Add A Project
+          </button>
+        </div>
         <span className="self-center font-medium">
           No protfolio Projects Added
         </span>
@@ -67,6 +82,11 @@ const ProfilePage = () => {
           })}
         </div>
       </div>
+
+      <CreatePortfolioProjectModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      />
     </div>
   );
 };
