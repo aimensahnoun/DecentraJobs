@@ -56,7 +56,7 @@ const ActiveProjectContent = () => {
     }
   }, [search , projects]);
 
-  console.log(filteredProjects);
+
 
   return (
     <div className="xl:w-[calc(100%-15rem)] 2xl:w-[calc(100%-20rem)] h-full py-[4rem] px-[2rem] overflow-y-scroll">

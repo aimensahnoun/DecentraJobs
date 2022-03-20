@@ -47,7 +47,6 @@ const Dashboard = () => {
     viewFunction("getProfile", { accountId: nearId }).then((result) => {
       if (!result) return router.replace("/onboarding");
 
-      console.log(result);
       setUser(result);
       setIsLoading(false);
     });

@@ -94,14 +94,14 @@ export default function Home() {
           className="p-2 bg-decentra-green text-white rounded-lg cursor-pointer z-10"
           onClick={() => {
             const user = wallet.getAccountId();
-            console.log(user);
+            
             if (user == "") {
               //Saving authentication state to localStorage
               localStorage.setItem("authenticating", true);
               return signIn();
             } else {
               viewFunction("getProfile", { accountId: user }).then((result) => {
-                console.log(result);
+                
                 if(result){
                   setUserProfileState(result);
                   router.push("/dashboard");

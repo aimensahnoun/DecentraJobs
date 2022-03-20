@@ -77,10 +77,6 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
     setWork(project.workResult);
   }, [project]);
 
-  console.log(typeof(work , work))
-
-  console.log(project);
-
   return (
     <Modal
       isOpen={isModalOpen}
@@ -119,26 +115,32 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
               <div className="flex gap-x-2">
                 {/* Actions section , edit , delete and apply */}
                 {!user.appliedProjects.includes(project.projectId) &&
-                  project.status === "OPEN" ? (
-                    <div
-                      className={`w-fit h-[2rem] p-2 rounded-lg flex items-center justify-center cursor-pointer ${
-                        project.ownerId !== wallet.getAccountId()
-                          ? "bg-decentra-green"
-                          : "bg-decentra-lightblue"
-                      }  `}
-                      onClick={() => {
-                        if (project.ownerId !== wallet.getAccountId()) {
-                          setIsApplying(true);
-                        }
-                      }}
-                    >
-                      <span>
-                        {project.ownerId === wallet.getAccountId()
-                          ? "Edit"
-                          : "Apply"}
-                      </span>
-                    </div>
-                  ) : project.status ==="CLOSED" && <span className="text-decentra-green font-medium">COMPLETED</span>}
+                project.status === "OPEN" ? (
+                  <div
+                    className={`w-fit h-[2rem] p-2 rounded-lg flex items-center justify-center cursor-pointer ${
+                      project.ownerId !== wallet.getAccountId()
+                        ? "bg-decentra-green"
+                        : "bg-decentra-lightblue"
+                    }  `}
+                    onClick={() => {
+                      if (project.ownerId !== wallet.getAccountId()) {
+                        setIsApplying(true);
+                      }
+                    }}
+                  >
+                    <span>
+                      {project.ownerId === wallet.getAccountId()
+                        ? "Edit"
+                        : "Apply"}
+                    </span>
+                  </div>
+                ) : (
+                  project.status === "CLOSED" && (
+                    <span className="text-decentra-green font-medium">
+                      COMPLETED
+                    </span>
+                  )
+                )}
                 {/* Allowing owner to delete project only if no one got accepted for the job */}
                 {project.ownerId === wallet.getAccountId() &&
                   project.status === "OPEN" && (
@@ -236,10 +238,8 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                             key={index}
                             className="transition-all duration-300"
                             onClick={(e) => {
-                              console.log(
-                                e.currentTarget.children[1].classList.toggle(
-                                  "hidden"
-                                )
+                              e.currentTarget.children[1].classList.toggle(
+                                "hidden"
                               );
                             }}
                           >
@@ -362,10 +362,8 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                               key={index}
                               className="transition-all duration-300"
                               onClick={(e) => {
-                                console.log(
-                                  e.currentTarget.children[1].classList.toggle(
-                                    "hidden"
-                                  )
+                                e.currentTarget.children[1].classList.toggle(
+                                  "hidden"
                                 );
                               }}
                             >
@@ -411,43 +409,48 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                                     <HiDocumentText className="text-[1.5rem]" />
                                     <span>Download Work</span>
                                   </div>
-                                  {project.status === "COMPLETED" && <button
-                                    className="self-center rounded-lg bg-decentra-green p-2 flex items-center justify-center"
-                                    onClick={async (e) => {
-                                      e.stopPropagation()
-                                      callFunction("completeProject", {
-                                        projectId: project.projectId,
-                                      })
-                                        .then(() => {
-                                          updateData(setProjects, setUser);
-                                          toast.success(
-                                            "Project closed Successfully",
-                                            {
-                                              position: "top-right",
-                                              autoClose: 5000,
-                                              hideProgressBar: false,
-                                              closeOnClick: true,
-                                              pauseOnHover: true,
-                                              draggable: true,
-                                              progress: undefined,
-                                            }
-                                          );
+                                  {project.status === "COMPLETED" && (
+                                    <button
+                                      className="self-center rounded-lg bg-decentra-green p-2 flex items-center justify-center"
+                                      onClick={async (e) => {
+                                        e.stopPropagation();
+                                        callFunction("completeProject", {
+                                          projectId: project.projectId,
                                         })
-                                        .catch(() => {
-                                          toast.error("Something went wrong!", {
-                                            position: "top-right",
-                                            autoClose: 5000,
-                                            hideProgressBar: false,
-                                            closeOnClick: true,
-                                            pauseOnHover: true,
-                                            draggable: true,
-                                            progress: undefined,
+                                          .then(() => {
+                                            updateData(setProjects, setUser);
+                                            toast.success(
+                                              "Project closed Successfully",
+                                              {
+                                                position: "top-right",
+                                                autoClose: 5000,
+                                                hideProgressBar: false,
+                                                closeOnClick: true,
+                                                pauseOnHover: true,
+                                                draggable: true,
+                                                progress: undefined,
+                                              }
+                                            );
+                                          })
+                                          .catch(() => {
+                                            toast.error(
+                                              "Something went wrong!",
+                                              {
+                                                position: "top-right",
+                                                autoClose: 5000,
+                                                hideProgressBar: false,
+                                                closeOnClick: true,
+                                                pauseOnHover: true,
+                                                draggable: true,
+                                                progress: undefined,
+                                              }
+                                            );
                                           });
-                                        });
-                                    }}
-                                  >
-                                    Payout Project
-                                  </button>}
+                                      }}
+                                    >
+                                      Payout Project
+                                    </button>
+                                  )}
                                 </div>
                               )}
                             </div>
@@ -547,9 +550,11 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                                 >
                                   <HiDocumentText className="text-[1.5rem] text-decentra-green" />
                                   <span>
-                                    {work && typeof(work)=="object" ? work?.name : "Download work"}
+                                    {work && typeof work == "object"
+                                      ? work?.name
+                                      : "Download work"}
                                   </span>
-                                  {work && typeof(work)=="object" && (
+                                  {work && typeof work == "object" && (
                                     <AiOutlineDelete
                                       className="text-[1.5rem] cursor-pointer ml-auto"
                                       onClick={(e) => {
@@ -560,7 +565,7 @@ const ProjectDetails = ({ isModalOpen, setIsModalOpen, project }) => {
                                     />
                                   )}
                                 </div>
-                                {work && typeof(work)=="object" && (
+                                {work && typeof work == "object" && (
                                   <button
                                     className="self-center rounded-lg bg-decentra-green p-2 flex items-center justify-center"
                                     onClick={async () => {
