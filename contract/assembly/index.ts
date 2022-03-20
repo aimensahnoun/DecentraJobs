@@ -10,7 +10,7 @@ import {
 } from "near-sdk-as";
 
 //Models import
-import { Profile, Project, Proposal } from "../models/models";
+import { Profile, Project, Proposal, PortfolioProject } from "../models/models";
 
 // storing userProfiles
 const userProfiles = new PersistentUnorderedMap<string, Profile>("uP");
@@ -244,23 +244,51 @@ export function completeProject(projectId: u32): boolean {
 
   if (project != null) {
     assert(project.status == "COMPLETED", "Project is not completed");
-    
+
     assert(
       project.ownerId == context.sender,
       "Only owner can complete project"
     );
 
     //Changing proposal status to completed
-    for(let i = 0 ; i< project.proposals.length ; i++){
-      if(project.proposals[i].proposalStatus === "Accepted") {
+    for (let i = 0; i < project.proposals.length; i++) {
+      if (project.proposals[i].proposalStatus === "Accepted") {
         project.proposals[i].proposalStatus = "COMPLETED";
       }
     }
 
     project.status = "CLOSED";
-    ContractPromiseBatch.create(project.freelancer).transfer(project.cost)
+    ContractPromiseBatch.create(project.freelancer).transfer(project.cost);
     projects.set(project.projectId, project);
   }
 
+  return true;
+}
+
+//Add project portfolio
+export function addPortfolioProject(
+  title: string,
+  description: string,
+  createdOn: string,
+  imgUrl: string,
+  tags: string[]
+): boolean {
+  const user = userProfiles.get(context.sender);
+
+  assert(user != null, "User does not exist");
+
+  if (user != null) {
+    const portfolio = new PortfolioProject(
+      title,
+      description,
+      createdOn,
+      imgUrl,
+      tags
+    );
+
+    user.portfolioProjects.push(portfolio);
+
+    userProfiles.set(context.sender, user);
+  }
   return true;
 }
