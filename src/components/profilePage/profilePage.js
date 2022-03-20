@@ -2,6 +2,9 @@
 //Component import
 import DecentraImage from "../decentraImage/decentraImage";
 
+//Near import
+import {wallet} from "../../../near/near-setup"
+
 //Recoil import
 import { useRecoilValue } from "recoil";
 import { userProfile } from "../../recoil/state";
@@ -25,13 +28,13 @@ const ProfilePage = () => {
             <span className="text-decentra-green font-medium text-[1.5rem]">
               {user.fullName}
             </span>
-            <span className="text-[1.2rem]">aimen.near</span>
+            <span className="text-[1.2rem]">{wallet.getAccountId()}</span>
           </div>
         </div>
 
-        <div className="w-fit h-[2rem] rounded-lg bg-decentra-green flex items-center justify-center p-4 cursor-pointer">
+        {/* <div className="w-fit h-[2rem] rounded-lg bg-decentra-green flex items-center justify-center p-4 cursor-pointer">
           <span className="text-[1.5rem]">Hire</span>
-        </div>
+        </div> */}
       </div>
 
       <div className="flex flex-col gap-y-2">
