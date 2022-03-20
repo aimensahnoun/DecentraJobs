@@ -14,15 +14,17 @@ import CreateProjectModal from "../createProjectModal/createProjectModal";
 
 //Recoil import
 import { useRecoilState } from "recoil";
-import { userProfile } from "../../recoil/state";
+import { userProfile, projectsList, updateData } from "../../recoil/state";
 
 const ClientListContent = () => {
+  //Recoil state
+  const [user, setUser] = useRecoilState(userProfile);
+  const [projects, setProjects] = useRecoilState(projectsList);
+
+  //Use State
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [projects, setProjects] = useState(null);
   const [search, setSearch] = useState("");
   const [filteredProjects, setFilteredProjects] = useState(projects);
-
-  const [user, setUser] = useRecoilState(userProfile);
 
   //Funciont to get user data as well as applied projects
   const fetchNeededData = () => {
@@ -34,10 +36,11 @@ const ClientListContent = () => {
       .then(() => {
         viewFunction("getAllProject")
           .then((res) => {
-            const myProjects = res.filter((project) =>
+            setProjects(res);
+            const myProjects = projects.filter((project) =>
               user.appliedProjects.includes(project.projectId)
             );
-            setProjects(myProjects);
+
             setFilteredProjects(myProjects);
           })
           .catch((err) => {
@@ -66,14 +69,14 @@ const ClientListContent = () => {
         })
       );
     }
-  }, [search]);
+  }, [search , projects]);
 
   return (
     <div className="w-[calc(100%-20rem)] h-full py-[4rem] px-[2rem]">
       {/* Header */}
       <div className="flex items-center justify-between mb-[2rem]">
         <div className="flex gap-x-16 items-center">
-          <span className="text-[1.5rem] text-decentra-green">My Projects</span>
+          <span className="text-[1.5rem] text-decentra-green">My Clients</span>
           <div className="w-[25rem] h-[3rem] rounded-lg shadow-decentra p-2 flex items-center">
             <AiOutlineSearch className="text-[1.5rem] text-decentra-green mr-2" />
             <input
