@@ -60,8 +60,8 @@ NEXT_PUBLIC_STORAGE_API = "API_KEY"
 ## How Does It Work? (Technical)
 
 These following technologies have been used in this project:
-1. [NextJS](https://nextjs.org): used as a front-end for the project.
-2. [Recoil](https://recoiljs.org) : used as a state management solution for the proejct.
+1. [NextJS](https://nextjs.org): used as a front-end for the project
+2. [Recoil](https://recoiljs.org) : used as a state management solution for the proejct
 3. [We3Storage](https://web3.storage) : used to store all files such as images, pdfs , and zip files in a decentralized fashion.
 4. [Near](https://near.org) : Used to to handle authentication , payment , as well as storing all of the user profile , project data on chain.
 
@@ -81,4 +81,5 @@ So this is a general To-Do list that will hopefully be added to the project as s
 * [ ] Work History: This will be shown in any freelancers profile page, to show their accomplishments and to improve their reputation within the platform. 
 
 
-
+# DecentraJobs Demo
+[![DecentraJobs](https://user-images.githubusercontent.com/62159014/159173743-8f20479b-0339-4f5b-9308-6533b09ffa47.png)](https://www.loom.com/share/57994958329245a9ac678e5ade9e9045)
