@@ -271,7 +271,8 @@ export function addPortfolioProject(
   description: string,
   createdOn: string,
   imgUrl: string,
-  tags: string[]
+  tags: string[],
+  projectUrl: string
 ): boolean {
   const user = userProfiles.get(context.sender);
 
@@ -283,7 +284,8 @@ export function addPortfolioProject(
       description,
       createdOn,
       imgUrl,
-      tags
+      tags,
+      projectUrl
     );
 
     user.portfolioProjects.push(portfolio);

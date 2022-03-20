@@ -7,7 +7,7 @@ export class Profile {
   avatarUrl: string;
   skills: string[];
   appliedProjects: u32[] = [];
-  portfolioProjects : PortfolioProject[] = [];
+  portfolioProjects: PortfolioProject[] = [];
   constructor(
     fullName: string,
     bio: string,
@@ -95,13 +95,15 @@ export class PortfolioProject {
   imgUrl: string;
   projectId: u32;
   tags: string[];
+  projectUrl: string;
 
   constructor(
     title: string,
     description: string,
     createdOn: string,
     imgUrl: string,
-    tags: string[]
+    tags: string[],
+    projectUrl: string
   ) {
     this.title = title;
     this.description = description;
@@ -109,5 +111,6 @@ export class PortfolioProject {
     this.imgUrl = imgUrl;
     this.projectId = new RNG<u32>(1, u32.MAX_VALUE).next();
     this.tags = tags;
+    this.projectUrl = projectUrl;
   }
 }

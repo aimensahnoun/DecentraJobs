@@ -53,22 +53,20 @@ const CreatePortfolioProjectModal = ({ isModalOpen, setIsModalOpen }) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
-    const { title, deadline, cost, description } = data;
+    const { title, createdOn, projectUrl, description } = data;
 
-    const url = brief ? await uploadFile(brief, "pdf") : "null";
+    const url = brief ? await uploadFile(brief, "image") : "null";
 
     callFunction(
-      "createProject",
+      "addPortfolioProject",
       {
         title,
         description,
-        deadline,
-        ownerId: wallet.getAccountId(),
-        projectBrief: url,
-        timestamp: new Date().getTime().toString(),
+        createdOn,
+        imgUrl: url,
         tags: tagsArray,
+        projectUrl
       },
-      cost
     )
       .then((data) => {
         updateData(setProjects, setUserProfile);
@@ -99,7 +97,7 @@ const CreatePortfolioProjectModal = ({ isModalOpen, setIsModalOpen }) => {
 
   const tags = watch("tags");
 
-  const cost = watch("cost");
+
 
   //Refs
   const briefRef = useRef(null);
@@ -184,7 +182,7 @@ const CreatePortfolioProjectModal = ({ isModalOpen, setIsModalOpen }) => {
           <div className="flex flex-col">
             <span>Project Creation Date : </span>
             <input
-              {...register("deadline", { required: true })}
+              {...register("createdOn", { required: true })}
               type="date"
               max={maxDate}
               className="w-[20rem] h-[3rem] bg-decentra-lightblue rounded-lg p-2"
@@ -228,7 +226,7 @@ const CreatePortfolioProjectModal = ({ isModalOpen, setIsModalOpen }) => {
           <span>Project Link : </span>
           <input
             type="url"
-            {...register("link", { required: true, type: "url" })}
+            {...register("projectUrl", { required: true, type: "url" })}
             className="w-[41.5rem] h-[3rem] outline-none bg-decentra-lightblue rounded-lg p-2"
             placeholder="www.myproject.com"
           />
