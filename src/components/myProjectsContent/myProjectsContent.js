@@ -43,22 +43,29 @@ const MyProjectsContent = () => {
   }, []);
 
   useEffect(() => {
-    if (search === "") return setFilteredProjects(projects);
+    if (search === "")
+      return setFilteredProjects(
+        projects.filter((project) => project.ownerId == wallet.getAccountId())
+      );
     if (projects) {
       setFilteredProjects(
         projects.filter((project) => {
           return (
-            project.title.toLowerCase().includes(search.toLowerCase()) ||
-            project.description.toLowerCase().includes(search.toLowerCase()) ||
-            project.tags
-              ?.map((tag) => tag.toLowerCase())
-              .includes(search.toLowerCase()) ||
-            project.ownerId.toLowerCase().includes(search.toLowerCase())
+            project.ownerId == wallet.getAccountId() &&
+            (project.title.toLowerCase().includes(search.toLowerCase()) ||
+              project.description
+                .toLowerCase()
+                .includes(search.toLowerCase()) ||
+              project.tags
+                ?.map((tag) => tag.toLowerCase())
+                .includes(search.toLowerCase()) ||
+              (project.ownerId.toLowerCase().includes(search.toLowerCase()) &&
+                project.ownerId == wallet.getAccountId()))
           );
         })
       );
     }
-  }, [search , projects]);
+  }, [search, projects]);
 
   console.log(filteredProjects);
 

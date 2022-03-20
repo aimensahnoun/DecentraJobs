@@ -54,22 +54,30 @@ const ClientListContent = () => {
   }, []);
 
   useEffect(() => {
-    if (search === "") return setFilteredProjects(projects);
+    if (search === "")
+      return setFilteredProjects(
+        projects.filter((project) =>
+          user.appliedProjects.includes(project.projectId)
+        )
+      );
     if (projects) {
       setFilteredProjects(
         projects.filter((project) => {
           return (
-            project.title.toLowerCase().includes(search.toLowerCase()) ||
-            project.description.toLowerCase().includes(search.toLowerCase()) ||
-            project.tags
-              ?.map((tag) => tag.toLowerCase())
-              .includes(search.toLowerCase()) ||
-            project.ownerId.toLowerCase().includes(search.toLowerCase())
+            user.appliedProjects.includes(project.projectId) &&
+            (project.title.toLowerCase().includes(search.toLowerCase()) ||
+              project.description
+                .toLowerCase()
+                .includes(search.toLowerCase()) ||
+              project.tags
+                ?.map((tag) => tag.toLowerCase())
+                .includes(search.toLowerCase()) ||
+              project.ownerId.toLowerCase().includes(search.toLowerCase()))
           );
         })
       );
     }
-  }, [search , projects]);
+  }, [search, projects]);
 
   return (
     <div className="w-[calc(100%-20rem)] h-full py-[4rem] px-[2rem]">
