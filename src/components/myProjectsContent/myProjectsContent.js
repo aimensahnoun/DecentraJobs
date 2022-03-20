@@ -70,7 +70,7 @@ const MyProjectsContent = () => {
   console.log(filteredProjects);
 
   return (
-    <div className="w-[calc(100%-20rem)] h-full py-[4rem] px-[2rem]">
+    <div className="w-[calc(100%-20rem)] h-full py-[4rem] px-[2rem] overflow-y-scroll">
       {/* Header */}
       <div className="flex items-center justify-between mb-[2rem]">
         <div className="flex gap-x-16 items-center">

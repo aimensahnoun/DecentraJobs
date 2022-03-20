@@ -13,6 +13,12 @@ import { wallet } from "../../../near/near-setup";
 import { useRecoilValue } from "recoil";
 import { userProfile } from "../../recoil/state";
 
+//Icons import
+import { AiOutlineLink } from "react-icons/ai";
+
+//Utils import
+import { parseDate } from "../../utils/parse-date";
+
 const ProfilePage = () => {
   //Recoil state
   const user = useRecoilValue(userProfile);
@@ -21,7 +27,7 @@ const ProfilePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className="w-[calc(100%-20rem)] h-full py-[4rem] px-[2rem]">
+    <div className="w-[calc(100%-20rem)] h-full py-[4rem] px-[2rem] overflow-y-scroll">
       <div className=" flex items-center justify-between mb-[2rem]">
         <div className="flex gap-x-4 items-center">
           <div className="w-[5rem] h-[5rem] bg-gray-100 rounded-full relative">
@@ -62,7 +68,36 @@ const ProfilePage = () => {
           </button>
         </div>
         <span className="self-center font-medium">
-          No protfolio Projects Added
+          {user.portfolioProjects.length === 0 ? (
+            "No protfolio Projects Added"
+          ) : (
+            <div className="grid gap-4 w-full h-fit grid-cols-8">
+              {user.portfolioProjects.map((project, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="w-[20rem] h-[30rem] rounded-lg shadow-decentra"
+                  >
+                    <img
+                      className="rounded-tl-lg rounded-tr-lg h-[80%] w-full object-cover"
+                      alt="project image"
+                      src={project.imgUrl}
+                    />
+                    <div className="flex items-center justify-between p-4">
+                      <div className="flex flex-col gap-y-4">
+                        <span>{project.title}</span>
+                        <span>{parseDate(project.creationDate)}</span>
+                      </div>
+
+                      <div className="w-[2rem] h-[2rem] border-[1px] rounded-full flex justify-center items-center cursor-pointer" onClick={() => window.open(project.projectUrl, "_blank")}>
+                        <AiOutlineLink />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </span>
       </div>
 
