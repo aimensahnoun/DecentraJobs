@@ -9,29 +9,32 @@ import { viewFunction, wallet } from "../../../near/near-setup";
 import { AiOutlineSearch } from "react-icons/ai";
 import { IoMdAdd } from "react-icons/io";
 
-//Assets import
-import NoProject from "../../../public/assets/images/noProject.svg";
 //Component import
 import ProjectComponent from "../projectComponent/projectComponent";
 import CreateProjectModal from "../createProjectModal/createProjectModal";
-import DecentraImage from "../decentraImage/decentraImage";
+
+//Recoil import
+import { useRecoilState } from "recoil";
+import { projectsList, updateData, userProfile } from "../../recoil/state";
 
 const MyProjectsContent = () => {
+  //Recoil state
+  const [projects, setProjects] = useRecoilState(projectsList);
+  const [_user, setUser] = useRecoilState(userProfile);
+
+  //Use State
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [projects, setProjects] = useState(null);
   const [search, setSearch] = useState("");
   const [filteredProjects, setFilteredProjects] = useState(projects);
-
-
-  console.log("image" , NoProject)
 
   useEffect(() => {
     viewFunction("getAllProject")
       .then((res) => {
-        const myProjects = res.filter(
+        updateData(setProjects, setUser);
+
+        const myProjects = projects.filter(
           (project) => project.ownerId == wallet.getAccountId()
         );
-        setProjects(myProjects);
         setFilteredProjects(myProjects);
       })
       .catch((err) => {
@@ -55,7 +58,7 @@ const MyProjectsContent = () => {
         })
       );
     }
-  }, [search]);
+  }, [search , projects]);
 
   console.log(filteredProjects);
 
@@ -72,10 +75,12 @@ const MyProjectsContent = () => {
               onFocus={() => {
                 viewFunction("getAllProject")
                   .then((res) => {
-                    const myProjects = res.filter(
+                    updateData(setProjects, setUser);
+                    const myProjects = projects.filter(
                       (project) => project.ownerId == wallet.getAccountId()
                     );
-                    setProjects(myProjects);
+
+                    setFilteredProjects(myProjects);
                   })
                   .catch((err) => {
                     console.log(err);
@@ -108,7 +113,11 @@ const MyProjectsContent = () => {
           })
         ) : (
           <div className="w-full h-[calc(100vh-20rem)] items-center justify-center flex flex-col">
-            <img src="/assets/images/noProject.svg" alt="noProject"  className="w-[25rem] h-[25rem]"/>
+            <img
+              src="/assets/images/noProject.svg"
+              alt="noProject"
+              className="w-[25rem] h-[25rem]"
+            />
             <span>You do not have any projects</span>
           </div>
         )}
